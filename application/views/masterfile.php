@@ -490,6 +490,113 @@
     </div>
 </div>
 
+<div class="modal fade" id="editFishModal" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" style="max-width:600px; margin-top: 10px;">
+        <div class="modal-content">
+            <div class="modal-header bg-light border-bottom">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-fish me-2 text-primary"></i>
+                    Edit Fish Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="container p-0">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body py-2 pb-0">
+                            <form id="edit_fish_form">
+                                <!-- Fish Type -->
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold text-muted small mb-2">
+                                            <i class="fas fa-fish me-1"></i> FISH TYPE
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" id="edit_fish_type"
+                                            name="edit_fish_type">
+
+                                        <input type="hidden" id="edit_fish_id">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted small mb-2">
+                                            <i class="fas fa-tag me-1"></i> PRICE PER KG
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="number" class="form-control form-control-lg"
+                                                id="edit_fish_amount_per_kg" name="edit_fish_amount_per_kg" step="0.01"
+                                                min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted small mb-2">
+                                            <i class="fas fa-calendar-alt me-1"></i> DATE ADDED
+                                        </label>
+                                        <input type="date" class="form-control form-control-lg"
+                                            id="edit_fish_date_added" name="edit_fish_date_added">
+                                    </div>
+                                </div>
+
+                                <!-- Transaction Section -->
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <h6 class="fw-bold text-danger mb-3">
+                                            <i class="fas fa-minus-circle me-2"></i> Remove Stock
+                                        </h6>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold text-muted small mb-2">
+                                            <i class="fas fa-calendar-alt me-1"></i> TRANSACTION DATE
+                                        </label>
+                                        <input type="date" class="form-control form-control-lg"
+                                            id="edit_fish_trans_date" name="edit_fish_trans_date"
+                                            value="<?= date('Y-m-d') ?>">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold text-muted small mb-2">
+                                            <i class="fas fa-weight-hanging me-1"></i> CURRENT STOCK (KG)
+                                        </label>
+                                        <div class="alert alert-info py-2 mb-2">
+                                            <strong id="current_fish_stock">0</strong> kg available
+                                        </div>
+                                        <label class="form-label fw-bold text-muted small mb-2">
+                                            <i class="fas fa-minus me-1"></i> REMOVE QUANTITY (KG)
+                                        </label>
+                                        <input type="number" class="form-control form-control-lg" id="edit_fish_qty"
+                                            name="edit_fish_qty" min="0" value="0"
+                                            placeholder="Enter quantity in kg to remove">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" id="saveEditFish" name="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Update
+                            </button>
+                            <button type="button" class="btn btn-light ms-2" data-bs-dismiss="modal"
+                                id="closeEditFishModalBtn">
+                                <i class="fas fa-times me-1"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/fraction.js@4.2.0/fraction.min.js"></script>
 
 <script>
@@ -688,7 +795,7 @@
                         <button class="btn btn-sm btn-primary" onclick="addBtn(this)" data-fish-id="${data}" data-fish-type="${row.fish_type ? row.fish_type.replace(/"/g, '&quot;') : ''}">
                             <i class="fas fa-plus"></i>
                         </button>
-                        <button class="btn btn-sm btn-success" onclick='openFishModal("editItem", ${JSON.stringify(row)})'>
+                         <button class="btn btn-sm btn-success" onclick='editFish(${JSON.stringify(row)})' title="Edit">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-danger" onclick="deleteBtn('${data}')">
@@ -913,7 +1020,7 @@
 
         // Previous button
         var prevDisabled = currentPage === 1 ? 'disabled' : '';
-            paginationContainer.append(`
+        paginationContainer.append(`
             <li class="page-item ${prevDisabled}">
                 <a class="page-link" href="#" data-fish-id="${fish_id}" data-page="${currentPage - 1}">&laquo; Previous</a>
             </li>
@@ -1813,6 +1920,90 @@
         });
     });
 
+    function editFish(row) {
+
+        console.log(row);
+        // Pre-fill the edit modal with current data
+        $('#edit_fish_id').val(row.id);
+        $('#edit_fish_type').val(row.fish_type);
+        $('#edit_fish_amount_per_kg').val(row.price_per_kg);
+        $('#edit_fish_date_added').val(row.date_added);
+        $('#edit_trans_date').val('<?= date('Y-m-d') ?>');
+        $('#edit_qty_25kg').val(0);
+        $('#edit_qty_50kg').val(0);
+
+        // Display current stock levels
+        $('#current_fish_stock').text(row.rem_qty || 0);
+
+        // Store original fish type for update
+        $('#edit_fish_type').data('original', row.fish_type);
+
+        $('#editFishModal').modal('show');
+    }
+
+    $('#saveEditFish').on('click', function () {
+        const currentkg = parseInt($('#current_fish_stock').text()) || 0;
+
+        const formData = {
+            fish_id: $('#edit_fish_id').val(),
+            original_fish_type: $('#edit_fish_type').data('original'),
+            fish_type: $('#edit_fish_type').val().trim(),
+            price_per_kg: parseFloat($('#edit_fish_amount_per_kg').val()) || 0,
+            date_added: $('#edit_fish_date_added').val().trim(),
+            trans_date: $('#edit_trans_date').val().trim(),
+            qty: parseInt($('#edit_fish_qty').val()) || 0,
+        };
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to update this fish type.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, update!',
+            cancelButtonText: 'Cancel',
+            allowEnterKey: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Processing...',
+                    html: 'Please wait',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '<?php echo base_url("Masterfile_cont/update_fish"); ?>',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (res) {
+                        Swal.close();
+                        Swal.fire({
+                            title: 'Success',
+                            text: res.message,
+                            icon: 'success',
+                            timer: 800,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        }).then(() => {
+                            fish_table.ajax.reload();
+                            $('#editFishModal').modal('hide');
+                        });
+                    },
+                    error: function (err) {
+                        Swal.close();
+                        console.log(err);
+                        Swal.fire({ icon: 'error', title: 'Server Error', text: 'Check console for details' });
+                    }
+                });
+            }
+        });
+    });
+
     // Function to edit rice
     function editRice(row) {
 
@@ -1851,51 +2042,14 @@
             qty_50kg: parseInt($('#edit_qty_50kg').val()) || 0
         };
 
-        // Validation
-        if (formData.rice_type === "") {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please enter rice type' });
-            return;
-        }
-
-        if (formData.price_per_kg <= 0) {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please enter a valid price per kg' });
-            return;
-        }
-
-        if (formData.date_added === "") {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please select date added' });
-            return;
-        }
-
-        if (formData.trans_date === "") {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please select transaction date' });
-            return;
-        }
-
-        // Check if trying to remove more than available
-        if (formData.qty_25kg > current25kg) {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: `Cannot remove ${formData.qty_25kg} sacks. Only ${current25kg} available.` });
-            return;
-        }
-
-        if (formData.qty_50kg > current50kg) {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: `Cannot remove ${formData.qty_50kg} sacks. Only ${current50kg} available.` });
-            return;
-        }
-
-        if (formData.qty_25kg === 0 && formData.qty_50kg === 0) {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please enter quantity to remove for at least one sack type' });
-            return;
-        }
-
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You are about to update this rice type and remove the specified stock.',
+            text: 'You are about to update this rice type.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc3545',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, remove stock!',
+            confirmButtonText: 'Yes, update!',
             cancelButtonText: 'Cancel',
             allowEnterKey: false
         }).then((result) => {
@@ -1938,110 +2092,6 @@
         });
     });
 
-    // Function to edit rice
-    // function editRice(row) {
-    //     // Pre-fill the edit modal with current data
-    //     $('#edit_rice_type').val(row.rice_type);
-    //     $('#edit_rice_amount_per_kg').val(row.price_per_kg);
-    //     $('#edit_rice_date_added').val(row.date_added);
-    //     $('#edit_trans_type').val('add'); // Default to add
-    //     $('#edit_trans_date').val('<?= date('Y-m-d') ?>');
-    //     $('#edit_qty_25kg').val(0);
-    //     $('#edit_qty_50kg').val(0);
-
-    //     $('#editRiceModal').modal('show');
-    // }
-
-    // Function to save edited rice
-    $('#saveEditRice').on('click', function () {
-        const formData = {
-            original_rice_type: '', // We'll set this in the function
-            rice_type: $('#edit_rice_type').val().trim(),
-            price_per_kg: parseFloat($('#edit_rice_amount_per_kg').val()) || 0,
-            date_added: $('#edit_rice_date_added').val().trim(),
-            trans_type: $('#edit_trans_type').val(),
-            trans_date: $('#edit_trans_date').val().trim(),
-            qty_25kg: parseInt($('#edit_qty_25kg').val()) || 0,
-            qty_50kg: parseInt($('#edit_qty_50kg').val()) || 0
-        };
-
-        // Validation
-        if (formData.rice_type === "") {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please enter rice type' });
-            return;
-        }
-
-        if (formData.price_per_kg <= 0) {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please enter a valid price per kg' });
-            return;
-        }
-
-        if (formData.date_added === "") {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please select date added' });
-            return;
-        }
-
-        if (formData.trans_date === "") {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please select transaction date' });
-            return;
-        }
-
-        if (formData.qty_25kg === 0 && formData.qty_50kg === 0) {
-            Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please enter quantity for at least one sack type' });
-            return;
-        }
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You are about to update this rice type and process the stock transaction.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#f39c12',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, update it!',
-            cancelButtonText: 'Cancel',
-            allowEnterKey: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Processing...',
-                    html: 'Please wait',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                $.ajax({
-                    url: '<?php echo base_url("Masterfile_cont/update_rice"); ?>',
-                    type: 'POST',
-                    data: formData,
-                    dataType: 'json',
-                    success: function (res) {
-                        Swal.close();
-                        Swal.fire({
-                            title: 'Success',
-                            text: res.message,
-                            icon: 'success',
-                            timer: 800,
-                            timerProgressBar: true,
-                            showConfirmButton: false
-                        }).then(() => {
-                            rice_table.ajax.reload();
-                            $('#editRiceModal').modal('hide');
-                        });
-                    },
-                    error: function (err) {
-                        Swal.close();
-                        console.log(err);
-                        Swal.fire({ icon: 'error', title: 'Server Error', text: 'Check console for details' });
-                    }
-                });
-            }
-        });
-    });
-
-    // Function to generate detail HTML
     function getDetailHtml(data) {
 
         var total_in_25kg = parseInt(data.total_in_25kg) || 0;

@@ -241,7 +241,7 @@ class Monitoring_cont extends CI_Controller
         // Fetch rice transactions
         $this->db->select("
             id,
-            CONCAT(trans_date, ' - ', due_date) AS date_to_pay,
+            CONCAT(date_added, ' - ', due_date) AS date_to_pay,
             status,
             'rice' as type
         ");
@@ -302,6 +302,7 @@ class Monitoring_cont extends CI_Controller
         if ($type === 'fish') {
             // Fetch fish transaction header
             $this->db->select("
+                ft.cl_id,
                 ft.id as trans_id,
                 ft.total_amt,
                 ft.status,
@@ -344,26 +345,36 @@ class Monitoring_cont extends CI_Controller
                 'payments' => $payments
             ]);
         } elseif ($type === 'rice') {
-            // Fetch rice transaction details
+            // Fetch rice transaction header
             $this->db->select("
+                rt.cl_id,
                 rt.id as trans_id,
                 rt.total_amt,
                 rt.status,
-                rt.trans_date as start_date,
+                rt.date_added as start_date,
                 rt.due_date,
-                rt.added_amt,
-                rt.interest,
-                rt.date_completed,
-                r.rice_type,
-                r.sack_type,
-                rt.qty,
-                rt.price_per_kg
+                rt.date_completed
             ");
             $this->db->from('tbl_rice_transaction rt');
-            $this->db->join('tbl_rice r', 'r.id = rt.rice_id');
             $this->db->where('rt.id', $id);
             $query = $this->db->get();
             $data = $query->row_array();
+
+            // Fetch rice transaction detail rows
+            $this->db->select("
+                r.rice_type,
+                r.sack_type,
+                rtd.qty,
+                rtd.price_per_kg,
+                rtd.interest,
+                rtd.added_amt,
+                rtd.sub_total
+            ");
+            $this->db->from('tbl_rice_transaction_details rtd');
+            $this->db->join('tbl_rice r', 'r.id = rtd.rice_id');
+            $this->db->where('rtd.trans_id', $id);
+            $details_query = $this->db->get();
+            $details = $details_query->result_array();
 
             // Fetch payments
             $this->db->select('payment_for, amt');
@@ -376,6 +387,7 @@ class Monitoring_cont extends CI_Controller
             echo json_encode([
                 'type' => 'rice',
                 'data' => $data,
+                'details' => $details,
                 'payments' => $payments
             ]);
         }
@@ -389,12 +401,14 @@ class Monitoring_cont extends CI_Controller
         $type = $this->input->post('type');
 
         $this->db->where('trans_id', $trans_id);
+        $this->db->where('type', $type);
         $this->db->where('payment_for', $payment_for);
         $query = $this->db->get('tbl_payment');
 
         if ($query->num_rows() > 0) {
             $this->db->set('amt', $amount);
             $this->db->where('trans_id', $trans_id);
+            $this->db->where('type', $type);
             $this->db->where('payment_for', $payment_for);
             $updated = $this->db->update('tbl_payment');
 
@@ -458,13 +472,13 @@ class Monitoring_cont extends CI_Controller
             rt.id as trans_id,
             rt.total_amt,
             rt.status,
-            rt.trans_date as start_date,
+            rt.date_added as start_date,
             rt.due_date,
             'rice' as type
         ");
         $this->db->from('tbl_rice_transaction rt');
         $this->db->where('rt.cl_id', $client_id);
-        $this->db->order_by('rt.trans_date', 'DESC');
+        $this->db->order_by('rt.date_added', 'DESC');
         $rice_query = $this->db->get();
         $rice_loans = $rice_query->result_array();
 
@@ -485,40 +499,35 @@ class Monitoring_cont extends CI_Controller
         $interest = $this->input->post('interest');
         $added_amt = $this->input->post('added_amt');
         $total_amt = $this->input->post('total_amt');
+        $type = $this->input->post('type');
+        $cl_id = $this->input->post('cl_id');
 
         $data = array(
-            'complete_date' => $complete_date,
+            'date_completed' => $complete_date,
             'status' => 'completed'
         );
 
         if ($action === "ongoing") {
             $data['status'] = 'ongoing';
-            $data['complete_date'] = NULL;
+            $data['date_completed'] = NULL;
         } else if ($action === "overdue") {
             $data['status'] = 'overdue';
-            $data['complete_date'] = $due_date;
-        }
-
-        $loan = $this->db->select('cl_id')
-            ->from('tbl_loan')
-            ->where('id', $loan_id)
-            ->get()
-            ->row();
-
-        if (!$loan) {
-            echo json_encode(['status' => 'error', 'message' => 'Loan not found']);
-            return;
+            $data['date_completed'] = $due_date;
         }
 
         $this->db->where('id', $loan_id);
-        $updated = $this->db->update('tbl_loan', $data);
+        if ($type === "fish") {
+            $updated = $this->db->update('tbl_fish_transaction', $data);
+        } else {
+            $updated = $this->db->update('tbl_rice_transaction', $data);
+        }
 
         if ($updated && $action === "overdue") {
 
             $new_due_date = date('Y-m-d', strtotime($new_start_date . ' +58 days'));
 
             $new_loan_details = array(
-                'cl_id' => $loan->cl_id,
+                'cl_id' => $cl_id,
                 'capital_amt' => $running_bal,
                 'interest' => $interest,
                 'added_amt' => $added_amt,
@@ -2115,7 +2124,6 @@ class Monitoring_cont extends CI_Controller
             $client_id = $this->input->post('client_id');
             $items = $this->input->post('items');
             $grand_total = $this->input->post('grand_total');
-            $trans_date = $this->input->post('trans_date');
 
             // Validate required fields
             if (empty($client_id)) {
@@ -2158,9 +2166,9 @@ class Monitoring_cont extends CI_Controller
                 $fishTransactionData = array(
                     'cl_id' => $client_id,
                     'total_amt' => $totalSubtotal,
-                    'status' => 'pending',
-                    'date_added' => $trans_date,
-                    'due_date' => date('Y-m-d', strtotime($trans_date . ' + 15 days'))
+                    'status' => 'ongoing',
+                    'date_added' => $fish['trans_date'],
+                    'due_date' => date('Y-m-d', strtotime($fish['trans_date'] . ' + 15 days'))
                 );
 
                 $this->db->insert('tbl_fish_transaction', $fishTransactionData);
@@ -2186,17 +2194,47 @@ class Monitoring_cont extends CI_Controller
                         'fish_id' => $fish['product_id'],
                         'qty' => $qtyInGrams,
                         'trans_type' => 'out',
-                        'trans_date' => $trans_date,
+                        'trans_date' => $fish['trans_date'],
                     );
 
                     $this->db->insert('tbl_fish_stock', $fishStockData);
                 }
             }
 
-            // Save Rice Transactions
+            // Save Rice Transactions using transaction detail rows
             if (!empty($riceItems)) {
+                $totalRiceSubtotal = 0;
+                $totalRiceQty = 0;
+
                 foreach ($riceItems as $rice) {
-                    // Get rice_id by matching rice_type and sack_size from tbl_rice
+                    $totalRiceSubtotal += floatval($rice['subtotal']);
+                    $totalRiceQty += floatval($rice['quantity']);
+                }
+
+                // Use the first rice item to populate the main rice transaction rice_id field.
+                $this->db->select('id');
+                $this->db->from('tbl_rice');
+                $this->db->where('rice_type', $riceItems[0]['product_name']);
+                $this->db->where('sack_type', $riceItems[0]['sack_size'] . 'kg');
+                $query = $this->db->get();
+                $firstRiceRecord = $query->row();
+
+                if (!$firstRiceRecord) {
+                    throw new Exception('Rice type not found: ' . $riceItems[0]['product_name'] . ' (' . $riceItems[0]['sack_size'] . 'kg)');
+                }
+
+                $riceTransactionData = array(
+                    'cl_id' => $client_id,
+                    'total_amt' => $totalRiceSubtotal,
+                    'date_added' => $rice['trans_date'],
+                    'due_date' => date('Y-m-d', strtotime($rice['trans_date'] . ' + 30 days')),
+                    'status' => 'ongoing'
+                );
+
+                $this->db->insert('tbl_rice_transaction', $riceTransactionData);
+                $riceTransId = $this->db->insert_id();
+
+                foreach ($riceItems as $rice) {
                     $this->db->select('id');
                     $this->db->from('tbl_rice');
                     $this->db->where('rice_type', $rice['product_name']);
@@ -2208,29 +2246,23 @@ class Monitoring_cont extends CI_Controller
                         throw new Exception('Rice type not found: ' . $rice['product_name'] . ' (' . $rice['sack_size'] . 'kg)');
                     }
 
-                    $rice_id = $rice_record->id;
-
-                    $riceTransactionData = array(
-                        'cl_id' => $client_id,
-                        'rice_id' => $rice_id,
+                    $riceDetailData = array(
+                        'trans_id' => $riceTransId,
+                        'rice_id' => $rice_record->id,
                         'qty' => $rice['quantity'],
                         'price_per_kg' => $rice['price_per_unit'],
                         'interest' => isset($rice['interest_rate']) ? $rice['interest_rate'] : 0,
                         'added_amt' => isset($rice['added_amount']) ? $rice['added_amount'] : 0,
-                        'total_amt' => $rice['subtotal'],
-                        'trans_date' => $trans_date,
-                        'due_date' => date('Y-m-d', strtotime($trans_date . ' + 30 days')),
-                        'status' => 'pending'
+                        'sub_total' => $rice['subtotal']
                     );
 
-                    $this->db->insert('tbl_rice_transaction', $riceTransactionData);
+                    $this->db->insert('tbl_rice_transaction_details', $riceDetailData);
 
-                    // Save to rice stock
                     $riceStockData = array(
-                        'rice_id' => $rice_id,
+                        'rice_id' => $rice_record->id,
                         'qty' => $rice['quantity'],
                         'trans_type' => 'out',
-                        'trans_date' => $trans_date,
+                        'trans_date' => $rice['trans_date'],
                     );
 
                     $this->db->insert('tbl_rice_stock', $riceStockData);
@@ -2250,5 +2282,270 @@ class Monitoring_cont extends CI_Controller
             $this->db->trans_rollback();
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
+    }
+
+    public function get_loan_date_range()
+    {
+        $id = $this->input->post('client_id');
+
+        $response = array();
+
+        $this->db->select('id, date_added, due_date, status, total_amt, date_completed');
+        $this->db->from('tbl_fish_transaction');
+        $this->db->where('cl_id', $id);
+        $this->db->order_by('id', 'DESC');
+
+        $fish_query = $this->db->get();
+        $response['fish'] = $fish_query->result();
+
+        $this->db->select('id, date_added, due_date, status, total_amt, date_completed');
+        $this->db->from('tbl_rice_transaction');
+        $this->db->where('cl_id', $id);
+        $this->db->order_by('id', 'DESC');
+
+        $rice_query = $this->db->get();
+        $response['rice'] = $rice_query->result();
+
+        echo json_encode($response);
+    }
+
+    public function get_fish_loan_details()
+    {
+        $id = $this->input->post('loan_id');
+
+        $this->db->select('
+            b.fish_type,
+            a.qty,
+            a.price_per_kg,
+            a.interest,
+            a.added_amt,
+            a.sub_total
+        ');
+
+        $this->db->from('tbl_fish_transaction_details as a');
+        $this->db->join('tbl_fish as b', 'a.fish_id = b.id');
+        $this->db->where('a.trans_id', $id);
+
+        $query = $this->db->get();
+        echo json_encode($query->result());
+    }
+    public function get_rice_loan_details()
+    {
+        $id = $this->input->post('loan_id');
+
+        // Validate input
+        if (empty($id)) {
+            echo json_encode(['error' => 'No loan ID provided']);
+            return;
+        }
+
+        $this->db->select('
+        b.rice_type,
+        b.sack_type,
+        a.qty,
+        a.price_per_kg,
+        a.interest,
+        a.added_amt,
+        a.sub_total
+    ');
+
+        $this->db->from('tbl_rice_transaction_details as a');
+        $this->db->join('tbl_rice as b', 'a.rice_id = b.id', 'left');
+        $this->db->where('a.trans_id', $id);
+
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            echo json_encode($query->result());
+        } else {
+            echo json_encode(['error' => 'No records found']);
+        }
+    }
+
+    public function get_payment_history_fish()
+    {
+        $id = $this->input->post('loan_id');
+
+        $this->db->select('amt, payment_for');
+        $this->db->from('tbl_payment');
+        $this->db->where('trans_id', $id);
+        $this->db->where('type', "fish");
+        $query = $this->db->get();
+        echo json_encode($query->result());
+    }
+
+    public function get_payment_history_rice()
+    {
+        $id = $this->input->post('loan_id');
+
+        $this->db->select('amt, payment_for');
+        $this->db->from('tbl_payment');
+        $this->db->where('trans_id', $id);
+        $this->db->where('type', "rice");
+        $query = $this->db->get();
+        echo json_encode($query->result());
+    }
+
+    public function save_dried_fish_loan()
+    {
+        $client_id = $this->input->post('client_id');
+        $transaction_date = $this->input->post('transaction_date');
+        $items = $this->input->post('items');
+        $grand_total = $this->input->post('grand_total');
+
+        if (!$client_id || !$transaction_date || empty($items)) {
+            echo json_encode(['success' => false, 'message' => 'Missing required fields']);
+            return;
+        }
+
+        $due_date = date('Y-m-d', strtotime($transaction_date . ' + 15 days'));
+
+        $this->db->trans_start();
+
+        $loan_data = [
+            'cl_id' => $client_id,
+            'total_amt' => $grand_total,
+            'date_added' => $transaction_date,
+            'due_date' => $due_date,
+            'status' => 'ongoing'
+        ];
+
+        $this->db->insert('tbl_fish_transaction', $loan_data);
+        $loan_id = $this->db->insert_id();
+
+        foreach ($items as $item) {
+            $qtyInGrams = floatval($item['quantity']) * 1000;
+
+            $item_data = [
+                'trans_id' => $loan_id,
+                'fish_id' => $item['fish_type'],
+                'qty' => $qtyInGrams,
+                'price_per_kg' => $item['price_per_kg'],
+                'interest' => $item['interest_rate'],
+                'added_amt' => $item['added_amount'],
+                'sub_total' => $item['subtotal']
+            ];
+            $this->db->insert('tbl_fish_transaction_details', $item_data);
+
+            $fishStockData = array(
+                'fish_id' => $item['fish_type'],
+                'qty' => $qtyInGrams,
+                'trans_type' => 'out',
+                'trans_date' => $transaction_date,
+            );
+
+            $this->db->insert('tbl_fish_stock', $fishStockData);
+        }
+
+        $this->db->trans_complete();
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Loan saved successfully'
+        ]);
+    }
+
+    public function save_rice_loan()
+    {
+        $client_id = $this->input->post('client_id');
+        $transaction_date = $this->input->post('transaction_date');
+        $items = $this->input->post('items');
+        $grand_total = $this->input->post('grand_total');
+
+        $due_date = date('Y-m-d', strtotime($transaction_date . ' + 30 days'));
+
+        $this->db->trans_start();
+
+        $loan_data = [
+            'cl_id' => $client_id,
+            'total_amt' => $grand_total,
+            'date_added' => $transaction_date,
+            'due_date' => $due_date,
+            'status' => 'ongoing'
+        ];
+
+        $this->db->insert('tbl_rice_transaction', $loan_data);
+        $loan_id = $this->db->insert_id();
+
+        if (!$loan_id) {
+            throw new Exception('Failed to create loan record');
+        }
+
+        foreach ($items as $item) {
+            // Get rice_id by matching rice_type and sack_size
+            $this->db->select('id');
+            $this->db->where('rice_type', $item['rice_type']);
+            $this->db->where('sack_type', $item['sack_size'] . 'kg');
+            $query = $this->db->get('tbl_rice');
+
+            if ($query->num_rows() == 0) {
+                throw new Exception('Rice type not found: ' . $item['rice_type'] . ' with sack size: ' . $item['sack_size']);
+            }
+
+            $rice_id = $query->row()->id;
+
+            $item_data = [
+                'trans_id' => $loan_id,
+                'rice_id' => $rice_id,
+                'qty' => $item['quantity_sacks'],
+                'price_per_kg' => $item['price_per_kg'],
+                'interest' => $item['interest_rate'],
+                'added_amt' => $item['added_amount'],
+                'sub_total' => $item['subtotal']
+            ];
+            $this->db->insert('tbl_rice_transaction_details', $item_data);
+
+            // Update rice stock (deduct)
+            $riceStockData = array(
+                'rice_id' => $rice_id,
+                'qty' => $item['quantity_sacks'],
+                'trans_type' => 'out',
+                'trans_date' => $transaction_date,
+            );
+
+            $this->db->insert('tbl_rice_stock', $riceStockData);
+        }
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            throw new Exception('Transaction failed');
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Rice loan saved successfully'
+        ]);
+
+    }
+
+    public function auto_complete_payment()
+    {
+        $loan_id = $this->input->post('loan_id');
+        $type = $this->input->post('type');
+        $status = $this->input->post('status');
+
+        if ($status === 'completed') {
+            $data = [
+                'status' => 'completed',
+                'date_completed' => date('Y-m-d')
+            ];
+        } else {
+            $data = [
+                'status' => 'ongoing',
+                'date_completed' => null
+            ];
+        }
+
+        $table = ($type === "fish") ? 'tbl_fish_transaction' : 'tbl_rice_transaction';
+
+        $this->db->where('id', $loan_id);
+        $this->db->update($table, $data);
+
+        echo json_encode([
+            'success' => true,
+            'message' => ucfirst($type) . ' loan status updated to ' . strtoupper($status),
+            'status' => $status
+        ]);
     }
 }

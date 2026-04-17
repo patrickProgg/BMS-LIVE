@@ -610,4 +610,43 @@ class Masterfile_cont extends CI_Controller
             'message' => 'Rice updated and stock removed successfully'
         ]);
     }
+
+    public function update_fish()
+    {
+        $fish_id = $this->input->post('fish_id');
+        $fish_type = $this->input->post('fish_type');
+        $price_per_kg = $this->input->post('price_per_kg');
+        $date_added = $this->input->post('date_added');
+        $trans_date = $this->input->post('trans_date');
+        $qty = $this->input->post('qty');
+
+        $this->db->where("id", $fish_id);
+        $updated = $this->db->update("tbl_fish", [
+            'fish_type' => $fish_type,
+            'price_per_kg' => $price_per_kg,
+            'date_added' => $date_added
+        ]);
+
+        if ($updated) {
+            $data = [
+                'fish_id' => $fish_id,
+                'trans_type' => 'remove',
+                'qty' => $qty * 1000,
+                'trans_date' => $trans_date
+            ];
+
+            $this->db->insert('tbl_fish_stock', $data);
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Fish updated and stock removed successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to update fish record.'
+            ]);
+        }
+
+    }
 }
