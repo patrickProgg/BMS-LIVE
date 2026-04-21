@@ -389,7 +389,7 @@ class Masterfile_cont extends CI_Controller
             $params[] = $rice_id;
         }
 
-        $sql .= " ORDER BY b.trans_date DESC LIMIT 20";
+        $sql .= " ORDER BY b.id DESC";
 
         $query = $this->db->query($sql, $params);
         $data = $query->result_array();
