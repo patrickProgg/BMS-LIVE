@@ -42,7 +42,7 @@ class Masterfile_cont extends CI_Controller
 
             if ($row['rem_qty'] <= 0) {
                 $row['status'] = 'No Stock';
-            } elseif ($row['rem_qty'] < 1) {
+            } elseif ($row['rem_qty'] < 50) {
                 $row['status'] = 'Low Stock';
             } else {
                 $row['status'] = 'In Stock';
@@ -52,7 +52,7 @@ class Masterfile_cont extends CI_Controller
             $total_kg += $row['total_kg'];
 
             // Count low stock (below 1kg)
-            if ($row['total_kg'] > 0 && $row['total_kg'] < 1) {
+            if ($row['total_kg'] > 0 && $row['total_kg'] < 50) {
                 $low_stock_count++;
             }
         }

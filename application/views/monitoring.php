@@ -65,6 +65,16 @@
 
     .tab-link:hover {
         color: var(--bs-dark);
+
+    }
+
+    .tab-link-variance {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .tab-link-variance:hover {
+        color: var(--bs-dark);
     }
 
     .nav-tabs-custom {
@@ -102,6 +112,45 @@
     }
 
     .nav-tabs-custom a.active {
+        background: var(--bs-dark);
+        color: white;
+    }
+
+    .nav-tabs-custom-variance {
+        display: flex;
+        width: 100%;
+        list-style: none;
+        border: none;
+        box-shadow: none;
+        background: none;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .nav-tabs-custom-variance li {
+        flex: 1;
+        text-align: center;
+        box-shadow: none;
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-tabs-custom-variance a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 36.53px;
+        width: 100%;
+        text-decoration: none;
+        color: var(--bs-dark);
+        /* transition: background 0.2s; */
+        transition: background 0.5s;
+        border-bottom: 1px solid var(--bs-dark);
+    }
+
+    .nav-tabs-custom-variance a.active {
         background: var(--bs-dark);
         color: white;
     }
@@ -375,22 +424,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- TABS -->
-                                    <!-- <div class="mb-2">
-                                        <ul class="nav nav-pills">
-                                            <li class="nav-item w-50">
-                                                <button class="nav-link active w-100 tab-link" data-tab="view-fish">
-                                                    DRIED FISH
-                                                </button>
-                                            </li>
-                                            <li class="nav-item w-50">
-                                                <button class="nav-link w-100 tab-link" data-tab="view-rice">
-                                                    RICE
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div> -->
-
                                     <div class="head-title mt-0 mb-2">
                                         <ul class="breadcrumb nav-tabs-custom row">
                                             <li>
@@ -417,12 +450,12 @@
                                                 </h5>
                                                 <button
                                                     class="btn btn-sm btn-danger d-inline-block ms-2 delete-loan-btn"
-                                                    data-type="fish">
+                                                    data-type="fish" id="deleteFish">
                                                     <i class="fas fa-trash me-1"></i> Delete
                                                 </button>
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
-                                                <div class="dropdown" style="width: 167px;">
+                                                <div class="dropdown" style="width: 200px;">
                                                     <button
                                                         class="btn btn-sm btn-outline-secondary dropdown-toggle w-100 text-start fish-btn"
                                                         type="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -432,13 +465,13 @@
                                                         style="max-height: 200px; overflow-y: auto; z-index: 9999;">
                                                     </ul>
                                                 </div>
-                                                <button class="btn btn-sm btn-success edit-loan-btn" data-type="fish">
+                                                <!-- <button class="btn btn-sm btn-success edit-loan-btn" data-type="fish">
                                                     <i class="fas fa-edit me-1"></i> Edit
                                                 </button>
                                                 <button class="btn btn-sm btn-danger cancel-edit-btn" data-type="fish"
                                                     style="display: none;">
                                                     <i class="fas fa-times me-1"></i> Cancel
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
 
@@ -457,8 +490,8 @@
                                                 <b>₱ <span class="fish-total-amt"></span></b>
                                             </div>
                                             <div class="col-3">
-                                                <small>Balance</small><br>
-                                                <b>₱ <span class="fish-running-balance"></span></b>
+                                                <small>Running Balance</small><br>
+                                                <b>₱ <span class="fish-running-balance text-danger"></span></b>
                                             </div>
                                             <div class="col-3">
                                                 <small>Status</small><br>
@@ -470,13 +503,13 @@
                                         <div class="table-responsive mt-2">
                                             <table class="table table-sm table-bordered">
                                                 <thead class="table-dark">
-                                                    <tr>
-                                                        <th>Fish Type</th>
-                                                        <th>KG</th>
-                                                        <th>Price</th>
-                                                        <th>Interest</th>
-                                                        <th>Added</th>
-                                                        <th>Subtotal</th>
+                                                    <tr class="text-center">
+                                                        <th style="width:20%">Fish Type</th>
+                                                        <th style="width:16%">Qty(KG)</th>
+                                                        <th style="width:16%">Price</th>
+                                                        <th style="width:16%">Interest</th>
+                                                        <th style="width:16%">Added</th>
+                                                        <th style="width:16%">Subtotal</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="fish-transactions-body"></tbody>
@@ -484,14 +517,14 @@
                                         </div>
 
                                         <!-- PAYMENT TABLE -->
-                                        <div class="mt-2">
+                                        <div class="mt-0">
                                             <div class="table-responsive" style="max-height:260px; overflow:auto;">
                                                 <table class="table table-sm table-hover">
-                                                    <thead class="table-light">
-                                                        <tr>
+                                                    <thead class="sticky-top">
+                                                        <tr class="table-dark">
                                                             <th class="text-center">#</th>
                                                             <th class="text-center">Date</th>
-                                                            <th class="text-center">Payment Fish</th>
+                                                            <th class="text-center">Amount</th>
                                                             <th class="text-center">Action</th>
                                                         </tr>
                                                     </thead>
@@ -505,7 +538,7 @@
                                                 Total: ₱ <b id="fish_total_payment">0.00</b>
                                             </div>
                                             <div>
-                                                <button type="button" id="addNewLoan" class="btn btn-primary me-2"
+                                                <button type="button" id="addNewLoanFish" class="btn btn-primary me-2"
                                                     onclick="openAddNewLoanModalFish()">
                                                     <i class="fas fa-plus me-1"></i> New Credit
                                                 </button>
@@ -526,12 +559,12 @@
                                                 </h5>
                                                 <button
                                                     class="btn btn-sm btn-danger d-inline-block ms-2 delete-loan-btn"
-                                                    data-type="rice">
+                                                    data-type="rice" id="deleteRice">
                                                     <i class="fas fa-trash me-1"></i> Delete
                                                 </button>
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
-                                                <div class="dropdown" style="width: 167px;">
+                                                <div class="dropdown" style="width: 200px;">
                                                     <button
                                                         class="btn btn-sm btn-outline-secondary dropdown-toggle w-100 text-start rice-btn"
                                                         type="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -541,13 +574,13 @@
                                                         style="max-height: 200px; overflow-y: auto; z-index: 9999;">
                                                     </ul>
                                                 </div>
-                                                <button class="btn btn-sm btn-success edit-loan-btn" data-type="rice">
+                                                <!-- <button class="btn btn-sm btn-success edit-loan-btn" data-type="rice">
                                                     <i class="fas fa-edit me-1"></i> Edit
                                                 </button>
                                                 <button class="btn btn-sm btn-danger cancel-edit-btn" data-type="rice"
                                                     style="display: none;">
                                                     <i class="fas fa-times me-1"></i> Cancel
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
 
@@ -566,8 +599,8 @@
                                                 <b>₱ <span class="rice-total-amt"></span></b>
                                             </div>
                                             <div class="col-3">
-                                                <small>Balance</small><br>
-                                                <b>₱ <span class="rice-running-balance"></span></b>
+                                                <small>Running Balance</small><br>
+                                                <b>₱ <span class="rice-running-balance text-danger"></span></b>
                                             </div>
                                             <div class="col-3">
                                                 <small>Status</small><br>
@@ -579,14 +612,14 @@
                                         <div class="table-responsive mt-2">
                                             <table class="table table-sm table-bordered">
                                                 <thead class="table-dark">
-                                                    <tr>
-                                                        <th>Rice Type</th>
-                                                        <th>Sack</th>
-                                                        <th>Qty</th>
-                                                        <th>Price</th>
-                                                        <th>Interest</th>
-                                                        <th>Added</th>
-                                                        <th>Subtotal</th>
+                                                    <tr class="text-center">
+                                                        <th style="width:20%">Rice Type</th>
+                                                        <th style="width:8%">Sack Type</th>
+                                                        <th style="width:8%">Qty</th>
+                                                        <th style="width:16%">Price</th>
+                                                        <th style="width:16%">Interest</th>
+                                                        <th style="width:16%">Added</th>
+                                                        <th style="width:16%">Subtotal</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="rice-transactions-body"></tbody>
@@ -594,14 +627,14 @@
                                         </div>
 
                                         <!-- PAYMENT TABLE -->
-                                        <div class="mt-2">
+                                        <div class="mt-0">
                                             <div class="table-responsive" style="max-height:260px; overflow:auto;">
                                                 <table class="table table-sm table-hover">
-                                                    <thead class="table-light">
-                                                        <tr>
+                                                    <thead class="sticky-top">
+                                                        <tr class="table-dark">
                                                             <th class="text-center">#</th>
                                                             <th class="text-center">Date</th>
-                                                            <th class="text-center">Payment Rice</th>
+                                                            <th class="text-center">Amount</th>
                                                             <th class="text-center">Action</th>
                                                         </tr>
                                                     </thead>
@@ -615,7 +648,7 @@
                                                 Total: ₱ <b id="rice_total_payment">0.00</b>
                                             </div>
                                             <div>
-                                                <button type="button" id="addNewLoan"
+                                                <button type="button" id="addNewLoanRice"
                                                     onclick="openAddNewLoanModalRice()" class="btn btn-primary me-2">
                                                     <i class="fas fa-plus me-1"></i> New Credit
                                                 </button>
@@ -927,18 +960,253 @@
             </div>
         </div>
 
+        <div class="modal fade" id="bulk_payment_modal" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog" style="max-width:600px; margin-top:10px">
+                <div class="modal-content">
+                    <div class="modal-header bg-light border-bottom">
+                        <h5 class="modal-title fw-bold">
+                            <i class="fas fa-money-bill-wave me-2 text-success"></i>
+                            Bulk Payment For: <span id="bulk_date" class="text-success ms-1"></span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Simple buttons to switch -->
+                        <!-- <div class="mb-3">
+                            <button type="button" id="showFishBtn" class="btn btn-primary active">Fish</button>
+                            <button type="button" id="showRiceBtn" class="btn btn-success">Rice</button>
+                            <span id="paymentStatusText" class="ms-3 fw-bold text-muted">Fish Payment</span>
+                        </div> -->
+
+                        <div class="head-title mt-0 mb-2">
+                            <ul class="breadcrumb nav-tabs-custom-variance row">
+                                <li>
+                                    <a class="col-6 tab-link-variance active" id="showFishBtn"
+                                        style="border-radius: 5px 0 0 5px; cursor: pointer;">DRIED
+                                        FISH</a>
+                                </li>
+                                <li>
+                                    <a class="col-6 tab-link-variance" id="showRiceBtn"
+                                        style="border-radius: 0 5px 5px 0; cursor: pointer;">RICE</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Fish Table -->
+                        <div id="fishTableDiv">
+                            <div
+                                class="card-header bg-white border-0 pt-3 mb-3 d-flex justify-content-between align-items-center">
+                                <h6 class="fw-bold mb-0">
+                                    <i class="fas fa-list me-2 text-success"></i>
+                                    Payment Entries
+                                </h6>
+                                <div class="text-end">
+                                    <strong>Total: ₱<span id="fishTotal">0.00</span></strong>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th style="width:10%" class="text-center">#</th>
+                                            <th style="width:15%" class="text-center">ACC NO</th>
+                                            <th style="width:50%">CLIENT NAME</th>
+                                            <th style="width:25%" class="text-center">AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="fishTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Rice Table -->
+                        <div id="riceTableDiv" style="display:none;">
+                            <div
+                                class="card-header bg-white border-0 pt-3 mb-3 d-flex justify-content-between align-items-center">
+                                <h6 class="fw-bold mb-0">
+                                    <i class="fas fa-list me-2 text-success"></i>
+                                    Payment Entries
+                                </h6>
+                                <div class="text-end">
+                                    <strong>Total: ₱<span id="riceTotal">0.00</span></strong>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th style="width:10%" class="text-center">#</th>
+                                            <th style="width:15%" class="text-center">ACC NO</th>
+                                            <th style="width:50%">CLIENT NAME</th>
+                                            <th style="width:25%" class="text-center">AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="riceTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="savePaymentsBtn" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i> Save Payments</button>
+                        <button type="button" class="btn btn-light ms-2" data-bs-dismiss="modal" id="closeModalBtn">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VARIANCE MODAL -->
+        <div class="modal fade" id="variance_modal" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg" style="max-width: 600px; margin-top: 10px;">
+                <div class="modal-content">
+                    <div class="modal-header bg-light border-bottom">
+                        <h5 class="modal-title fw-bold">
+                            <i class="fas fa-balance-scale me-2 text-danger"></i>
+                            Variance Tracking
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body p-3">
+                        <!-- Add New Button -->
+                        <div class="mb-3 text-start">
+                            <button class="btn btn-primary" onclick="openAddVariance()">
+                                <i class="fas fa-plus-circle me-1"></i> Add New
+                            </button>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table id="variance_table" class="table table-hover mb-0 pb-0" style="width:100%">
+                                    <thead class="table-secondary">
+                                        <tr>
+                                            <th>DATE</th>
+                                            <th>OVER</th>
+                                            <th>SHORT</th>
+                                            <th style="width:150px">ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot class="table-light">
+                                        <tr style="font-weight: bold;">
+                                            <td class="text-end"><strong>TOTAL:</strong></td>
+                                            <td id="total_over" class="text-danger">
+                                                <strong>₱0.00</strong>
+                                            </td>
+                                            <td id="total_short" class="text-danger">
+                                                <strong>₱0.00</strong>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Close Button -->
+                        <div class="row mt-3">
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-1"></i> Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- VIEW VARIANCE MODAL -->
+
+        <!-- ADD VARIANCE MODAL -->
+        <div class="modal fade" id="addVarianceModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+            data-bs-keyboard="false">
+            <div class="modal-dialog" style="max-width:600px; margin-top:10px">
+                <div class="modal-content">
+                    <div class="modal-header bg-light border-bottom">
+                        <h5 class="modal-title fw-bold">
+                            <i class="fas fa-hand-holding-usd me-2 text-danger"></i>
+                            New Variance Data
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body pb-0">
+                        <div class="container p-0">
+                            <!-- Loan Details Card -->
+                            <div class="card border-0 shadow-sm rounded-4">
+                                <div class="card-header bg-white border-0">
+                                    <h6 class="fw-bold mb-0">
+                                        <i class="fas fa-calculator me-2 text-danger"></i>
+                                        Variance Details
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <!-- Capital Amount -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold text-muted small mb-2">
+                                                <i class="fas fa-coins me-1"></i> OVER
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0 fw-bold">₱</span>
+                                                <input id="variance_over" type="number"
+                                                    class="form-control form-control-lg" placeholder="0.00" min="0"
+                                                    step="0.01" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold text-muted small mb-2">
+                                                <i class="fas fa-coins me-1"></i> SHORT
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0 fw-bold">₱</span>
+                                                <input id="variance_short" type="number"
+                                                    class="form-control form-control-lg" placeholder="0.00" min="0"
+                                                    step="0.01" />
+                                            </div>
+                                        </div>
+
+                                        <!-- Start Date -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold text-muted small mb-2">
+                                                <i class="fas fa-calendar-alt me-1"></i> DATE
+                                            </label>
+                                            <input id="variance_date" type="date" class="form-control form-control-lg"
+                                                value="<?= date('Y-m-d') ?>" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-primary" id="addVariance">
+                            <i class="fas fa-check-circle me-1"></i> Add
+                        </button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 </section>
 
 <script>
 
     let globalClientId = 0;
-    let globalEditBtn = false;
 
     const viewLoanerEl = document.getElementById('viewLoaner');
     const addNewModalElFish = document.getElementById('addLoanSameClientFish');
     const addNewModalElRice = document.getElementById('addLoanSameClientRice');
     const varianceModal = document.getElementById('variance_modal');
+    const addVariance = document.getElementById('addVarianceModal');
 
     viewLoanerEl.addEventListener('hidden.bs.modal', () => {
         $('#dateDropdownBtn').prop('disabled', false);
@@ -967,6 +1235,14 @@
         viewLoanerEl.classList.remove('modal-dimmed');
     });
 
+    addVariance.addEventListener('show.bs.modal', () => {
+        varianceModal.classList.add('modal-dimmed');
+    });
+
+    addVariance.addEventListener('hidden.bs.modal', () => {
+        varianceModal.classList.remove('modal-dimmed');
+    });
+
 
 
     $(document).ready(function () {
@@ -981,6 +1257,13 @@
             $('#' + tab + '-tab').show();
 
             $('#current_loan_type').val(tab === 'view-fish' ? 'fish' : 'rice');
+        });
+
+        $('.tab-link-variance').click(function () {
+            let tab = $(this).data('tab');
+
+            $('.tab-link-variance').removeClass('active');
+            $(this).addClass('active');
         });
     });
 
@@ -1042,6 +1325,119 @@
 
         ]
     });
+
+    function openEditModal(id, acc_no, fullname, address, date_added) {
+        $('#editLoaner').modal('show');
+        $('#edit_acc_no').val(acc_no);
+        $('#edit_full_name').val(fullname);
+        $('#edit_address').val(address);
+        $('#edit_start_date').val(date_added);
+
+        $('#edit_client_form').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#update_client').trigger('click');
+            }
+        });
+
+        $("#update_client").on('click', function (e) {
+            e.preventDefault();
+
+            var name = $("#edit_full_name").val();
+
+            if (!name) {
+                Swal.fire({ icon: 'error', title: 'Oops...', text: "Can't leave full name empty" });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to update this client?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, update it!',
+                cancelButtonText: 'Cancel',
+                allowEnterKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        title: 'Updating client...',
+                        html: 'Please wait',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "<?= site_url('Monitoring_cont/update_client'); ?>",
+                        data: $('#edit_client_form').serialize() + '&id=' + id,
+                        dataType: 'json',
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 800,
+                                showConfirmButton: false,
+                                timerProgressBar: true
+                            });
+                            $('#editLoaner').modal('hide');
+                            client_table.ajax.reload();
+                        }
+                    });
+                }
+            });
+        });
+
+        $("#deleteBtn").on('click', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action will move data to history!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                allowEnterKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        title: 'Deleting client...',
+                        html: 'Please wait',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "<?= site_url('Monitoring_cont/delete_id'); ?>",
+                        data: { id: id },
+                        dataType: 'json',
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 800,
+                                showConfirmButton: false,
+                                timerProgressBar: true
+                            });
+                            $('#editLoaner').modal('hide');
+                            client_table.ajax.reload();
+                        }
+                    });
+                }
+            });
+        });
+
+    }
 
     $("#add_client").on('click', function (e) {
         e.preventDefault();
@@ -1114,10 +1510,20 @@
         }
     });
 
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        var date = new Date(dateString);
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var month = months[date.getMonth()];
+        var day = date.getDate();
+        var year = date.getFullYear();
+        return month + ' ' + day + ', ' + year;  // Added comma after day
+    }
+
     function openViewModal(id, fullname, address, acc_no, selectedLoanId = null, selectedType = null, visibleTab = null) {
 
         $('#viewLoaner').modal('show');
-        console.log(id);
 
         globalClientId = id;
 
@@ -1132,7 +1538,6 @@
             dataType: "json",
             data: { client_id: id },
             success: function (response) {
-                console.log(response);
 
                 let ongoingFishCount = response.fish ? response.fish.filter(loan => loan.status === 'ongoing').length : 0;
                 let ongoingRiceCount = response.rice ? response.rice.filter(loan => loan.status === 'ongoing').length : 0;
@@ -1140,23 +1545,10 @@
                 hasOngoingFish = ongoingFishCount > 0;
                 hasOngoingRice = ongoingRiceCount > 0;
 
-                if (hasOngoingFish) {
-                    console.log('Client has ongoing fish loan(s)');
-                }
+                let hasAnyOngoingLoan = hasOngoingFish || hasOngoingRice;
 
-                if (hasOngoingRice) {
-                    console.log('Client has ongoing rice loan(s)');
-                }
-
-                function formatDate(dateString) {
-                    if (!dateString) return '';
-                    var date = new Date(dateString);
-                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    var month = months[date.getMonth()];
-                    var day = date.getDate();
-                    var year = date.getFullYear();
-                    return month + ' ' + day + ' ' + year;
+                if (hasAnyOngoingLoan) {
+                    getLoanStatuses();
                 }
 
                 function onFishSelected(id, dateRange, startDate, dueDate, status, total_amt, balance, date_completed) {
@@ -1184,13 +1576,18 @@
 
                     if (status) {
                         var statusLower = status.toLowerCase();
-                        $('.fish-status').removeClass('text-success text-danger text-warning');
+                        var statusUpper = status.toUpperCase();
+                        $('.fish-status').removeClass('text-success text-danger text-primary');
+
                         if (statusLower === 'ongoing') {
-                            $('.fish-status').addClass('text-warning');
+                            $('.fish-status').addClass('text-primary');
+                            $('.fish-status').text(statusUpper);
                         } else if (statusLower === 'completed') {
                             $('.fish-status').addClass('text-success');
+                            $('.fish-status').text(statusUpper);
                         } else if (statusLower === 'overdue') {
                             $('.fish-status').addClass('text-danger');
+                            $('.fish-status').text(statusUpper);
                         }
                     }
 
@@ -1200,13 +1597,14 @@
                     $('#selected_fish_total').val(total_amt);
                     $('#selected_fish_balance').val(balance);
 
+                    let fishDetailsForDelete = [];
+
                     $.ajax({
                         url: '<?php echo site_url('Monitoring_cont/get_fish_loan_details'); ?>',
                         type: 'POST',
                         dataType: 'json',
                         data: { loan_id: id },
                         success: function (response) {
-                            console.log(response);
 
                             $('.fish-transactions-body').empty();
 
@@ -1215,20 +1613,25 @@
                                 $.each(response, function (index, item) {
                                     var kg = (parseFloat(item.qty) / 1000).toFixed(2);
                                     var price = parseFloat(item.price_per_kg).toFixed(2);
-                                    var interest = parseFloat(item.interest).toFixed(2);
+                                    // var interest = parseFloat(item.interest).toFixed(2);
                                     var added = parseFloat(item.added_amt).toFixed(2);
                                     var subtotal = parseFloat(item.sub_total).toFixed(2);
 
-                                    var row = '<tr>' +
-                                        '<td>' + (item.fish_type || 'N/A') + '</td>' +
-                                        '<td class="text-end">' + kg + '</td>' +
-                                        '<td class="text-end">₱ ' + price + '</td>' +
-                                        '<td class="text-end">' + interest + '%</td>' +
-                                        '<td class="text-end">₱ ' + added + '</td>' +
-                                        '<td class="text-end">₱ ' + subtotal + '</td>' +
+                                    var row = '<tr class="text-center">' +
+                                        '<td class="text-center">' + (item.fish_type || 'N/A') + '</td>' +
+                                        '<td class="text-center">' + kg + '</td>' +
+                                        '<td class="text-center">₱ ' + price + '</td>' +
+                                        '<td class="text-center">' + item.interest + '%</td>' +
+                                        '<td class="text-center">₱ ' + added + '</td>' +
+                                        '<td class="text-center">₱ ' + subtotal + '</td>' +
                                         '</tr>';
 
                                     $('.fish-transactions-body').append(row);
+
+                                    fishDetailsForDelete.push({
+                                        fish_id: item.fish_id,
+                                        qty: item.qty
+                                    });
                                 });
 
                             } else if (response && response.error) {
@@ -1247,85 +1650,62 @@
                             $('.fish-transactions-body').append(errorRow);
                         }
                     });
+
+                    $('#deleteFish').click(function () {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '<?php echo site_url('Monitoring_cont/delete_fish_loan_id'); ?>',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: {
+                                        loan_id: id,
+                                        fish_details: JSON.stringify(fishDetailsForDelete)
+                                    },
+                                    success: function (response) {
+                                        console.log(response);
+
+                                        if (response.success) {
+                                            Swal.fire(
+                                                'Deleted!',
+                                                'The credit has been deleted.',
+                                                'success'
+                                            ).then(() => {
+                                                openViewModal(
+                                                    globalClientId,
+                                                    $('#header_name').text(),
+                                                    $('#header_address').text(),
+                                                    $('#header_acc_no').text(),
+                                                    null,
+                                                    null,
+                                                    null
+                                                );
+
+                                                getLoanStatuses();
+                                            });
+                                        }
+                                    },
+                                    error: function () {
+                                        Swal.fire(
+                                            'Error!',
+                                            'Failed to delete the loan. Please try again.',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            }
+                        });
+                    });
                 }
-
-                // function getPaymentHistoryFish(id, startDate, dueDate) {
-                //     let start = new Date(startDate);
-                //     let end = new Date(dueDate);
-
-                //     $.ajax({
-                //         url: '<?php echo site_url('Monitoring_cont/get_payment_history_fish'); ?>',
-                //         type: 'POST',
-                //         dataType: 'json',
-                //         data: { loan_id: id },
-                //         success: function (response) {
-                //             // Create a map of payment dates to amounts
-                //             let paymentMap = {};
-                //             let totalPaid = 0;
-
-                //             if (response && response.length > 0) {
-                //                 response.forEach(function (payment) {
-                //                     paymentMap[payment.payment_for] = payment.amt;
-                //                     totalPaid += parseFloat(payment.amt);
-                //                 });
-                //             }
-
-                //             // Get total loan amount
-                //             let totalLoanAmount = parseFloat($('.fish-total-amt').text()) || 0;
-
-                //             // Calculate running balance
-                //             let runningBalance = totalLoanAmount - totalPaid;
-
-                //             $('.fish-running-balance').text(formatMoney(runningBalance));
-
-                //             $('#fish_total_payment').text(formatMoney(totalPaid));
-
-                //             // Build the table with payment data
-                //             let tableBody = '';
-                //             let rowIndex = 1;
-                //             let current = new Date(start);
-                //             current.setDate(current.getDate() + 1);
-
-                //             while (current <= end) {
-                //                 let dateStr = current.toISOString().split('T')[0];
-
-                //                 // Check if there's a payment for this date
-                //                 let paymentAmt = paymentMap[dateStr] || null;
-                //                 let formattedAmt = paymentAmt || '';
-                //                 let hasPayment = paymentAmt !== null;
-
-                //                 tableBody += `
-                //                     <table>
-                //                         <td class="text-center">${rowIndex}</td>
-                //                        <td class="text-center">${current.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                //                         <td class="text-center">
-                //                             <input type="text"
-                //                                 class="form-control text-center form-control-sm payment-input w-50 mx-auto ${hasPayment ? 'text-success' : ''}"
-                //                                 value="${formattedAmt}"
-                //                                 ${hasPayment ? 'readonly' : ''}
-                //                                 data-date="${dateStr}"
-                //                                 data-loan-id="${id}" />
-                //                         </td>
-                //                         <td class="text-center">
-                //                             <button class="btn btn-sm btn-success edit-btn" 
-                //                                 ${!hasPayment ? 'style="display:none;"' : ''}>
-                //                                 <i class="fas fa-edit"></i> Edit
-                //                             </button>
-                //                         </td>
-                //                     </tr>
-                //                 `;
-
-                //                 rowIndex++;
-                //                 current.setDate(current.getDate() + 1);
-                //             }
-
-                //             document.getElementById('fishPaymentTableBody').innerHTML = tableBody;
-                //         },
-                //         error: function (xhr, status, error) {
-                //             console.error("Error loading payment history: " + error);
-                //         }
-                //     });
-                // }
 
                 // Helper function to format money
                 function formatMoney(amount) {
@@ -1336,6 +1716,58 @@
                 }
 
                 function onRiceSelected(id, dateRange, startDate, dueDate, status, total_amt, balance, date_completed) {
+
+                    $('#deleteRice').click(function () {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '<?php echo site_url('Monitoring_cont/delete_rice_loan_id'); ?>',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: { loan_id: id },
+                                    success: function (response) {
+                                        console.log(response);
+
+                                        if (response.success) {
+                                            Swal.fire(
+                                                'Deleted!',
+                                                'The credit has been deleted.',
+                                                'success'
+                                            ).then(() => {
+                                                openViewModal(
+                                                    globalClientId,
+                                                    $('#header_name').text(),
+                                                    $('#header_address').text(),
+                                                    $('#header_acc_no').text(),
+                                                    null,
+                                                    null,
+                                                    null
+                                                );
+
+                                                getLoanStatuses();
+                                            });
+                                        }
+                                    },
+                                    error: function () {
+                                        Swal.fire(
+                                            'Error!',
+                                            'Failed to delete the loan. Please try again.',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            }
+                        });
+                    });
 
                     globalRiceStartDate = startDate;
                     globalRiceEndDate = dueDate;
@@ -1360,13 +1792,18 @@
 
                     if (status) {
                         var statusLower = status.toLowerCase();
-                        $('.rice-status').removeClass('text-success text-danger text-warning');
+                        var statusUpper = status.toUpperCase();
+                        $('.rice-status').removeClass('text-success text-danger text-primary');
+
                         if (statusLower === 'ongoing') {
-                            $('.rice-status').addClass('text-warning');
+                            $('.rice-status').addClass('text-primary');
+                            $('.rice-status').text(statusUpper);
                         } else if (statusLower === 'completed') {
                             $('.rice-status').addClass('text-success');
+                            $('.rice-status').text(statusUpper);
                         } else if (statusLower === 'overdue') {
                             $('.rice-status').addClass('text-danger');
+                            $('.rice-status').text(statusUpper);
                         }
                     }
 
@@ -1382,7 +1819,6 @@
                         dataType: 'json',
                         data: { loan_id: id },
                         success: function (response) {
-                            console.log(response);
 
                             $('.rice-transactions-body').empty();
 
@@ -1391,20 +1827,20 @@
                                 $.each(response, function (index, item) {
                                     var kg = item.qty;
                                     var price = parseFloat(item.price_per_kg).toFixed(2);
-                                    var interest = parseFloat(item.interest).toFixed(2);
+                                    // var interest = parseFloat(item.interest).toFixed(2);
                                     var added = parseFloat(item.added_amt).toFixed(2);
                                     var subtotal = parseFloat(item.sub_total).toFixed(2);
 
                                     var sackType = item.sack_type ? item.sack_type : 'N/A';
 
                                     var row = '<tr>' +
-                                        '<td>' + (item.rice_type || 'N/A') + '</td>' +
-                                        '<td>' + sackType + '</td>' +
-                                        '<td class="text-end">' + kg + '</td>' +
-                                        '<td class="text-end">₱ ' + price + '</td>' +
-                                        '<td class="text-end">' + interest + '%' + '</td>' +
-                                        '<td class="text-end">₱ ' + added + '</td>' +
-                                        '<td class="text-end">₱ ' + subtotal + '</td>' +
+                                        '<td class="text-center">' + (item.rice_type || 'N/A') + '</td>' +
+                                        '<td class="text-center">' + sackType + '</td>' +
+                                        '<td class="text-center">' + kg + '</td>' +
+                                        '<td class="text-center">₱ ' + price + '</td>' +
+                                        '<td class="text-center">' + item.interest + '%' + '</td>' +
+                                        '<td class="text-center">₱ ' + added + '</td>' +
+                                        '<td class="text-center">₱ ' + subtotal + '</td>' +
                                         '</tr>';
 
                                     $('.rice-transactions-body').append(row);
@@ -1429,83 +1865,6 @@
                     });
 
                 }
-
-                // function getPaymentHistoryRice(id, startDate, dueDate) {
-                //     let start = new Date(startDate);
-                //     let end = new Date(dueDate);
-
-                //     $.ajax({
-                //         url: '<?php echo site_url('Monitoring_cont/get_payment_history_rice'); ?>',
-                //         type: 'POST',
-                //         dataType: 'json',
-                //         data: { loan_id: id },
-                //         success: function (response) {
-                //             // Create a map of payment dates to amounts
-                //             let paymentMap = {};
-                //             let totalPaid = 0;
-
-                //             if (response && response.length > 0) {
-                //                 response.forEach(function (payment) {
-                //                     paymentMap[payment.payment_for] = payment.amt;
-                //                     totalPaid += parseFloat(payment.amt);
-                //                 });
-                //             }
-
-                //             // Get total loan amount
-                //             let totalLoanAmount = parseFloat($('.rice-total-amt').text()) || 0;
-
-                //             // Calculate running balance
-                //             let runningBalance = totalLoanAmount - totalPaid;
-
-                //             $('.rice-running-balance').text(formatMoney(runningBalance));
-                //             $('#rice_total_payment').text(formatMoney(totalPaid));
-
-                //             // Build the table with payment data
-                //             let tableBody = '';
-                //             let rowIndex = 1;
-                //             let current = new Date(start);
-                //             current.setDate(current.getDate() + 1);
-
-                //             while (current <= end) {
-                //                 let dateStr = current.toISOString().split('T')[0];
-
-                //                 let paymentAmt = paymentMap[dateStr] || null;
-                //                 let formattedAmt = paymentAmt || '';
-                //                 let hasPayment = paymentAmt !== null;
-
-                //                 tableBody += `
-                //                     <tr>
-                //                         <td class="text-center">${rowIndex}</td>
-                //                         <td class="text-center">${current.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                //                         <td class="text-center">
-                //                             <input type="text"
-                //                                 class="form-control text-center form-control-sm payment-input w-50 mx-auto ${hasPayment ? 'text-success' : ''}"
-                //                                 value="${formattedAmt}"
-                //                                 ${hasPayment ? 'readonly' : ''}
-                //                                 data-date="${dateStr}"
-                //                                 data-loan-id="${id}" />
-                //                         </td>
-                //                         <td class="text-center">
-                //                             <button class="btn btn-sm btn-success edit-btn" 
-                //                                 ${!hasPayment ? 'style="display:none;"' : ''}>
-                //                                 <i class="fas fa-edit"></i> Edit
-                //                             </button>
-                //                         </td>
-                //                     </tr>
-                //                 `;
-
-                //                 rowIndex++;
-                //                 current.setDate(current.getDate() + 1);
-                //             }
-
-                //             document.getElementById('ricePaymentTableBody').innerHTML = tableBody;
-
-                //         },
-                //         error: function (xhr, status, error) {
-                //             console.error("Error loading payment history: " + error);
-                //         }
-                //     });
-                // }
 
                 // Clear both dropdowns
                 $('.fish-dropdown').empty();
@@ -1630,6 +1989,7 @@
 
                     onRiceSelected(id, dateRange, startDate, dueDate, status, total_amt, date_completed);
                 });
+
             },
             error: function () {
                 Swal.fire('Error', 'Something went wrong.', 'error');
@@ -1638,9 +1998,7 @@
 
     }
 
-
-    function getPaymentHistoryFish(id, startDate, dueDate) {
-
+    function getPaymentHistoryFish(id, startDate, dueDate, callback, newPaymentAmount = 0) {
         let start = new Date(startDate);
         let end = new Date(dueDate);
 
@@ -1650,7 +2008,6 @@
             dataType: 'json',
             data: { loan_id: id },
             success: function (response) {
-                // Create a map of payment dates to amounts
                 let paymentMap = {};
                 let totalPaid = 0;
 
@@ -1661,14 +2018,21 @@
                     });
                 }
 
-                // Get total loan amount
-                let totalLoanAmount = parseFloat($('.fish-total-amt').text()) || 0;
+                // Add the new payment if provided
+                if (newPaymentAmount > 0) {
+                    totalPaid += parseFloat(newPaymentAmount);
+                }
 
-                // Calculate running balance
+                if (totalPaid != 0) {
+                    $('#deleteFish').addClass('d-none');
+                } else {
+                    $('#deleteFish').removeClass('d-none');
+                }
+
+                let totalLoanAmount = parseFloat($('.fish-total-amt').text()) || 0;
                 let runningBalance = totalLoanAmount - totalPaid;
 
                 $('.fish-running-balance').text(formatMoney(runningBalance));
-
                 $('#fish_total_payment').text(formatMoney(totalPaid));
 
                 // Build the table with payment data
@@ -1679,13 +2043,10 @@
 
                 while (current <= end) {
                     let dateStr = current.toISOString().split('T')[0];
-
-                    // Check if there's a payment for this date
                     let paymentAmt = paymentMap[dateStr] || null;
                     let hasPayment = paymentAmt !== null && parseFloat(paymentAmt) !== 0;
-
-                    // Format the amount safely
                     let formattedAmt = '';
+
                     if (hasPayment) {
                         formattedAmt = parseFloat(paymentAmt).toLocaleString('en-US', {
                             minimumFractionDigits: 2,
@@ -1695,9 +2056,9 @@
 
                     tableBody += `
                         <tr>
-                            <td class="text-center">${rowIndex}</td>
-                            <td class="text-center">${current.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                            <td class="text-center">
+                            <td class="text-center" style="width:10%">${rowIndex}</td>
+                            <td class="text-center" style="width:30%">${current.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                            <td class="text-center" style="width:30%">
                                 <input type="text"
                                     class="form-control text-center form-control-sm payment-input w-50 mx-auto ${hasPayment ? 'text-success' : ''}"
                                     value="${formattedAmt}"
@@ -1705,7 +2066,7 @@
                                     data-date="${dateStr}"
                                     data-loan-id="${id}" />
                             </td>
-                            <td class="text-center">
+                            <td class="text-center" style="width:30%">
                                 <button class="btn btn-sm btn-success edit-btn" 
                                     ${!hasPayment ? 'style="display:none;"' : ''}>
                                     <i class="fas fa-edit"></i> Edit
@@ -1719,14 +2080,21 @@
                 }
 
                 document.getElementById('fishPaymentTableBody').innerHTML = tableBody;
+
+                if (callback && typeof callback === 'function') {
+                    callback();
+                }
             },
             error: function (xhr, status, error) {
                 console.error("Error loading payment history: " + error);
+                if (callback && typeof callback === 'function') {
+                    callback();
+                }
             }
         });
     }
 
-    function getPaymentHistoryRice(id, startDate, dueDate) {
+    function getPaymentHistoryRice(id, startDate, dueDate, callback) {
         let start = new Date(startDate);
         let end = new Date(dueDate);
 
@@ -1745,6 +2113,12 @@
                         paymentMap[payment.payment_for] = payment.amt;
                         totalPaid += parseFloat(payment.amt);
                     });
+                }
+
+                if (totalPaid != 0) {
+                    $('#deleteRice').addClass('d-none');
+                } else {
+                    $('#deleteRice').removeClass('d-none');
                 }
 
                 // Get total loan amount
@@ -1777,25 +2151,25 @@
                     }
 
                     tableBody += `
-                        <tr>
-                            <td class="text-center">${rowIndex}</td>
-                            <td class="text-center">${current.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                            <td class="text-center">
-                                <input type="text"
-                                    class="form-control text-center form-control-sm payment-input w-50 mx-auto ${hasPayment ? 'text-success' : ''}"
-                                    value="${formattedAmt}"
-                                    ${hasPayment ? 'readonly' : ''}
-                                    data-date="${dateStr}"
-                                    data-loan-id="${id}" />
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-success edit-btn" 
-                                    ${!hasPayment ? 'style="display:none;"' : ''}>
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td class="text-center" style="width:10%">${rowIndex}</td>
+                        <td class="text-center" style="width:30%">${current.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                        <td class="text-center" style="width:30%">
+                            <input type="text"
+                                class="form-control text-center form-control-sm payment-input w-50 mx-auto ${hasPayment ? 'text-success' : ''}"
+                                value="${formattedAmt}"
+                                ${hasPayment ? 'readonly' : ''}
+                                data-date="${dateStr}"
+                                data-loan-id="${id}" />
+                        </td>
+                        <td class="text-center" style="width:30%">
+                            <button class="btn btn-sm btn-success edit-btn" 
+                                ${!hasPayment ? 'style="display:none;"' : ''}>
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </td>
+                    </tr>
+                `;
 
                     rowIndex++;
                     current.setDate(current.getDate() + 1);
@@ -1803,9 +2177,17 @@
 
                 document.getElementById('ricePaymentTableBody').innerHTML = tableBody;
 
+                // Execute the callback after DOM is updated
+                if (callback && typeof callback === 'function') {
+                    callback();
+                }
             },
             error: function (xhr, status, error) {
                 console.error("Error loading payment history: " + error);
+                // Still call callback on error
+                if (callback && typeof callback === 'function') {
+                    callback();
+                }
             }
         });
     }
@@ -1847,7 +2229,18 @@
             select.append('<option value="">Select Fish Type...</option>');
 
             $.each(fishDatabase, function (id, fish) {
-                select.append('<option value="' + id + '">' + fish.name + ' (Available: ' + fish.qty + ')</option>');
+                // Create option element
+                var option = $('<option></option>').val(id);
+
+                // Check if quantity is 0 or less
+                if (fish.qty <= 0) {
+                    option.prop('disabled', true);
+                    option.text(fish.name + ' - OUT OF STOCK');
+                } else {
+                    option.text(fish.name + ' (Available: ' + fish.qty + ')');
+                }
+
+                select.append(option);
             });
 
             if (currentValue) select.val(currentValue);
@@ -1917,7 +2310,7 @@
                 $.each(variants, function (i, variant) {
                     var option = $('<option>')
                         .val(variant.name)  // Use name as value
-                        .text(variant.display_name + ' - ' + variant.sack_type + 'kg - Stock: ' + variant.qty)
+                        .text(variant.display_name + ' - ' + 'Stock: ' + variant.qty)
                         .attr('data-price', variant.price)
                         .attr('data-sack-size', variant.sack_type)
                         .attr('data-rice-id', variant.id);
@@ -2070,31 +2463,12 @@
         $('#riceGrandTotal').text(grandTotal.toFixed(2));
     }
 
+
     $('#addDriedFishLoanBtn').click(function () {
 
         let clientId = globalClientId
 
-        if (!clientId) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Missing Information',
-                text: 'Client information is missing. Please select a client first.',
-                confirmButtonColor: '#3085d6'
-            });
-            return;
-        }
-
         let transactionDate = document.getElementById('fish_trans_date').value;
-
-        if (!transactionDate) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Missing Date',
-                text: 'Please select transaction date.',
-                confirmButtonColor: '#3085d6'
-            });
-            return;
-        }
 
         // Collect all fish items
         let fishItems = [];
@@ -2170,41 +2544,75 @@
             status: 'active'
         };
 
-        $.ajax({
-            url: '<?php echo site_url('Monitoring_cont/save_dried_fish_loan'); ?>',
-            type: 'POST',
-            dataType: 'json',
-            data: formData,
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: 'Dried fish loan has been saved successfully.',
-                        confirmButtonColor: '#3085d6'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#addLoanSameClientFish').modal('hide');
+        // Show confirmation dialog before submitting
+        Swal.fire({
+            title: 'Confirm Credit',
+            text: `Are you sure you want to add this dried fish credit? Total amount: ₱${parseFloat(grandTotal).toFixed(2)}`,
 
-                            resetDriedFishForm();
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: response.message || 'Failed to save loan. Please try again.',
-                        confirmButtonColor: '#3085d6'
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error saving loan:', error);
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Submit!',
+            cancelButtonText: 'No, Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading state
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'An error occurred while saving. Please try again.',
-                    confirmButtonColor: '#3085d6'
+                    title: 'Processing...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Proceed with AJAX submission
+                $.ajax({
+                    url: '<?php echo site_url('Monitoring_cont/save_dried_fish_loan'); ?>',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Dried fish credit has been saved successfully.',
+                                confirmButtonColor: '#3085d6'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $('#addLoanSameClientFish').modal('hide');
+                                    resetDriedFishForm();
+                                    openViewModal(
+                                        globalClientId,
+                                        $('#header_name').text(),
+                                        $('#header_address').text(),
+                                        $('#header_acc_no').text(),
+                                        null,
+                                        null,
+                                        null
+                                    );
+                                    getLoanStatuses();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.message || 'Failed to save loan. Please try again.',
+                                confirmButtonColor: '#3085d6'
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error saving loan:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while saving. Please try again.',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    }
                 });
             }
         });
@@ -2375,8 +2783,16 @@
                         if (result.isConfirmed) {
                             $('#addLoanSameClientRice').modal('hide');
                             resetRiceForm();
-                            // Reload page or refresh table
-                            location.reload();
+                            openViewModal(
+                                globalClientId,
+                                $('#header_name').text(),
+                                $('#header_address').text(),
+                                $('#header_acc_no').text(),
+                                null,
+                                null,
+                                null
+                            );
+                            getLoanStatuses();
                         }
                     });
                 } else {
@@ -2510,9 +2926,6 @@
                     <div class="mb-2">
                         <strong>Amount:</strong> ₱ ${formatMoney(paymentAmount)}
                     </div>
-                    <div class="mb-2">
-                        <strong>Running Balance:</strong> ₱ ${formatMoney(balanceAmount - paymentAmount)}
-                    </div>
                 </div>
             `,
                 icon: 'question',
@@ -2572,6 +2985,7 @@
                                 refreshLoanViewAfterPayment(loan_id, paymentType);
 
                                 updateTotalPaidDisplay(paymentAmount, paymentType, loan_id, payment_for, status);
+
                             });
                         } else {
                             Swal.fire('Error', res.message || 'Failed to save payment', 'error');
@@ -2619,9 +3033,6 @@
             data: { loan_id: loan_id },
             success: function (response) {
                 if (response.success) {
-                    console.log('response', response);
-
-                    // Refresh payment history table
                     getPaymentHistoryFish(loan_id, response.date_added, response.due_date);
                 }
             }
@@ -2636,15 +3047,8 @@
             data: { loan_id: loan_id },
             success: function (response) {
                 if (response.success) {
-                    console.log('response', response);
-                    // Update UI with new balance
                     $('#riceGrandTotal').text(response.balance);
 
-                    // Store rice dates globally
-                    globalRiceStartDate = response.date_added;
-                    globalRiceEndDate = response.due_date;
-
-                    // Refresh payment history table
                     getPaymentHistoryRice(loan_id, response.date_added, response.due_date);
                 }
             }
@@ -2656,40 +3060,32 @@
         const totalPaidSelector = isFish ? '#fish_total_payment' : '#rice_total_payment';
         const balanceSelector = isFish ? '.fish-running-balance' : '.rice-running-balance';
 
-        let currentTotalPaid = parseFloat($(totalPaidSelector).text().replace(/,/g, '')) || 0;
-        let currentBalance = parseFloat($(balanceSelector).text().replace(/,/g, '')) || 0;
+        function processUpdate() {
+            // Just read the values that AJAX already updated
+            let currentTotalPaid = parseFloat($(totalPaidSelector).text().replace(/,/g, '')) || 0;
+            let currentBalance = parseFloat($(balanceSelector).text().replace(/,/g, '')) || 0;
 
-        // Just add the new payment amount
-        let totalPaid = currentTotalPaid + parseFloat(amount);
-        let updatedBalance = currentBalance - parseFloat(amount);
-
-        $(totalPaidSelector).text(formatMoney(totalPaid));
-        $(balanceSelector).text(formatMoney(updatedBalance));
-
-        console.log(globalFishStartDate);
-        console.log(globalFishEndDate);
-        console.log(globalRiceStartDate);
-        console.log(globalRiceEndDate);
-
-        if (isFish) {
-            if (globalFishStartDate && globalFishEndDate) {
-                getPaymentHistoryFish(loan_id, globalFishStartDate, globalFishEndDate);
-            } else {
-                getFishLoanDetails(loan_id);
-            }
-        } else {
-            if (globalRiceStartDate && globalRiceEndDate) {
-                getPaymentHistoryRice(loan_id, globalRiceStartDate, globalRiceEndDate);
-            } else {
-                getRiceLoanDetails(loan_id);
+            // Auto-complete logic based on current values
+            if (currentBalance <= 0 && status !== 'COMPLETED') {
+                autoCompleteLoan(loan_id, type, payment_for, "completed");
+            } else if (currentBalance > 0 && status === 'COMPLETED') {
+                autoCompleteLoan(loan_id, type, payment_for, "ongoing");
             }
         }
 
-        // Auto-complete logic
-        if (updatedBalance <= 0 && status !== 'completed') {
-            autoCompleteLoan(loan_id, type, payment_for, "completed");
-        } else if (updatedBalance > 0 && status === 'completed') {
-            autoCompleteLoan(loan_id, type, payment_for, "ongoing");
+        // Call the appropriate function with callback
+        if (isFish) {
+            // if (globalFishStartDate && globalFishEndDate) {
+            getPaymentHistoryFish(loan_id, globalFishStartDate, globalFishEndDate, processUpdate);
+            // } else {
+            //     getFishLoanDetails(loan_id, processUpdate);
+            // }
+        } else {
+            // if (globalRiceStartDate && globalRiceEndDate) {
+            getPaymentHistoryRice(loan_id, globalRiceStartDate, globalRiceEndDate, processUpdate);
+            // } else {
+            //     getRiceLoanDetails(loan_id, processUpdate);
+            // }
         }
     }
 
@@ -2711,37 +3107,38 @@
                     let statusUpper = status.toUpperCase();
 
                     if (type === "fish") {
-                        $('.fish-status').removeClass('text-success text-danger text-warning');
+                        $('.fish-status').removeClass('text-success text-danger text-primary');
 
                         if (statusUpper === 'COMPLETED') {
                             $('.fish-status').addClass('text-success');
                         } else if (statusUpper === 'ONGOING') {
-                            $('.fish-status').addClass('text-warning');
+                            $('.fish-status').addClass('text-primary');
                         } else if (statusUpper === 'OVERDUE') {
                             $('.fish-status').addClass('text-danger');
                         }
 
                         $('.fish-status').text(statusUpper);
                     } else {
-                        $('.rice-status').removeClass('text-success text-danger text-warning');
+                        $('.rice-status').removeClass('text-success text-danger text-primary');
 
                         if (statusUpper === 'COMPLETED') {
                             $('.rice-status').addClass('text-success');
                         } else if (statusUpper === 'ONGOING') {
-                            $('.rice-status').addClass('text-warning');
+                            $('.rice-status').addClass('text-primary');
                         } else if (statusUpper === 'OVERDUE') {
                             $('.rice-status').addClass('text-danger');
                         }
 
                         $('.rice-status').text(statusUpper);
                     }
+
+                    getLoanStatuses();
                 }
             }
         });
     }
 
     $(document).on('click', '.edit-btn', function () {
-        globalEditBtn = true;
 
         let btn = $(this);
         let row = btn.closest('tr');
@@ -2763,4 +3160,669 @@
         }
     });
 
+    function getLoanStatuses() {
+        $.ajax({
+            url: "<?php echo base_url('Monitoring_cont/get_loan_statuses'); ?>",
+            type: "POST",
+            dataType: "json",
+            data: {
+                cl_id: globalClientId
+            },
+            success: function (res) {
+
+                let hasOngoingFish = res.fish_loans && res.fish_loans.some(loan => loan.status === 'ongoing');
+
+                let hasOngoingRice = res.rice_loans && res.rice_loans.some(loan => loan.status === 'ongoing');
+
+                if (hasOngoingFish) {
+                    $('#addNewLoanFish').hide();
+                } else {
+                    $('#addNewLoanFish').show();
+                }
+
+                if (hasOngoingRice) {
+                    $('#addNewLoanRice').hide();
+                } else {
+                    $('#addNewLoanRice').show();
+                }
+
+            }
+        });
+    }
+
+    let bulkPaymentData = {
+        selected_date: null,
+        payments: []
+    };
+
+    $(document).on('click', '#bulk_payment', function () {
+        const date = $('#selected_date').val();
+        bulkPaymentData.selected_date = date;
+
+        if (!date) {
+            Swal.fire('Error', 'Please select a valid date.', 'error');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Loading...',
+            html: 'Please wait while we fetch bulk payments.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $('#bulk_date').text(formatDate(date));
+
+        $.ajax({
+            url: '<?php echo site_url('Monitoring_cont/get_bulk_payment'); ?>',
+            type: 'POST',
+            dataType: 'json',
+            data: { date: date },
+            success: function (response) {
+                Swal.close();
+
+                console.log('Full response:', response);
+
+                if (!response) {
+                    Swal.fire('Error', 'No data received', 'error');
+                    return;
+                }
+
+                const fishCount = response.fish_data ? response.fish_data.length : 0;
+                const riceCount = response.rice_data ? response.rice_data.length : 0;
+
+                $('#fish_count_badge').text(fishCount);
+                $('#rice_count_badge').text(riceCount);
+                $('#total_clients_count').text(fishCount + riceCount);
+
+                populateFishBulkTable(response.fish_data || []);
+                populateRiceBulkTable(response.rice_data || []);
+
+                $('#bulk_payment_modal').modal('show');
+            },
+            error: function (xhr) {
+                Swal.close();
+                console.error('AJAX Error:', xhr);
+                Swal.fire('Error', 'Something went wrong', 'error');
+            }
+        });
+    });
+
+
+    // Show/hide tables
+    $('#showFishBtn').click(function () {
+        $('#fishTableDiv').show();
+        $('#riceTableDiv').hide();
+        $('#paymentStatusText').text('Fish Payment');
+    });
+
+    $('#showRiceBtn').click(function () {
+        $('#fishTableDiv').hide();
+        $('#riceTableDiv').show();
+        $('#paymentStatusText').text('Rice Payment');
+    });
+
+    // Populate fish table
+    // Populate fish table
+    function populateFishBulkTable(data, date) {
+        var tbody = $('#fishTableBody');
+        tbody.empty();
+
+        if (!data || data.length === 0) {
+            tbody.html('<td><td colspan="4" class="text-center">No data found</td></tr>');
+            return;
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            var client = data[i];
+            var hasPayment = client.amt && parseFloat(client.amt) > 0;
+            var existingPayment = parseFloat(client.amt || 0);
+
+            var paymentColumn = '';
+            if (hasPayment) {
+                paymentColumn = '<span class="text-success p-2"> ₱ ' + existingPayment.toFixed(2) + '</span>';
+            } else {
+                paymentColumn = '<input type="number" class="form-control payment-input-fish" ' +
+                    'data-loan-id="' + client.loan_id + '" ' +
+                    'data-type="fish" ' +
+                    'value="0" step="0.01" min="0">';
+            }
+
+            var row = '<tr>' +
+                '<td class="text-center">' + (i + 1) + '</td>' +
+                '<td class="text-center">' + (client.acc_no || 'N/A') + '</td>' +
+                '<td>' + (client.full_name || 'N/A') + '</td>' +
+                '<td class="text-center">' + paymentColumn + '</td>' +
+                '</tr>';
+            tbody.append(row);
+        }
+    }
+
+    // Populate rice table
+    function populateRiceBulkTable(data, date) {
+        var tbody = $('#riceTableBody');
+        tbody.empty();
+
+        if (!data || data.length === 0) {
+            tbody.html('<td><td colspan="4" class="text-center">No data found</td></tr>');
+            return;
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            var client = data[i];
+            var hasPayment = client.amt && parseFloat(client.amt) > 0;
+            var existingPayment = parseFloat(client.amt || 0);
+
+            var paymentColumn = '';
+            if (hasPayment) {
+                paymentColumn = '<span class="text-success p-2"> ₱ ' + existingPayment.toFixed(2) + '</span>';
+            } else {
+                paymentColumn = '<input type="number" class="form-control payment-input-rice" ' +
+                    'data-loan-id="' + client.loan_id + '" ' +
+                    'data-type="rice" ' +
+                    'value="0" step="0.01" min="0">';
+            }
+
+            var row = '<tr>' +
+                '<td class="text-center">' + (i + 1) + '</td>' +
+                '<td class="text-center">' + (client.acc_no || 'N/A') + '</td>' +
+                '<td>' + (client.full_name || 'N/A') + '</td>' +
+                '<td class="text-center">' + paymentColumn + '</td>' +
+                '</tr>';
+            tbody.append(row);
+        }
+    }
+
+    // Update totals
+    function updateTotals() {
+        var fishTotal = 0;
+        $('.payment-input-fish').each(function () {
+            fishTotal += parseFloat($(this).val()) || 0;
+        });
+        $('#fishTotal').text(fishTotal.toFixed(2));
+
+        var riceTotal = 0;
+        $('.payment-input-rice').each(function () {
+            riceTotal += parseFloat($(this).val()) || 0;
+        });
+        $('#riceTotal').text(riceTotal.toFixed(2));
+    }
+
+    $(document).on('input', '.payment-input-fish, .payment-input-rice', function () {
+        updateTotals();
+    });
+
+    // Save bulk payments
+    function saveBulkPayments() {
+        var payments = [];
+        var date = $('#selected_date').val();
+
+        // Collect fish payments
+        $('.payment-input-fish').each(function () {
+            var amount = parseFloat($(this).val()) || 0;
+            if (amount > 0) {
+                payments.push({
+                    loan_id: $(this).data('loan-id'),
+                    type: 'fish',
+                    amount: amount
+                });
+            }
+        });
+
+        // Collect rice payments
+        $('.payment-input-rice').each(function () {
+            var amount = parseFloat($(this).val()) || 0;
+            if (amount > 0) {
+                payments.push({
+                    loan_id: $(this).data('loan-id'),
+                    type: 'rice',
+                    amount: amount
+                });
+            }
+        });
+
+        if (payments.length === 0) {
+            Swal.fire('No Payments', 'Please enter payment amounts.', 'warning');
+            return;
+        }
+
+        // Simple confirmation
+        Swal.fire({
+            title: 'Confirm Save',
+            text: `Are you sure you want to save ${payments.length} payment(s)?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, save it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Saving payments',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '<?php echo site_url('Monitoring_cont/save_bulk_payments'); ?>',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        payments: payments,
+                        date: date
+                    },
+                    success: function (response) {
+                        Swal.close();
+                        if (response.success) {
+                            Swal.fire('Success!', 'Payments saved successfully.', 'success')
+                                .then(() => {
+                                    $('#bulk_payment_modal').modal('hide');
+                                    location.reload();
+                                });
+                        } else {
+                            Swal.fire('Error!', response.message || 'Failed to save payments.', 'error');
+                        }
+                    },
+                    error: function (xhr, error, status) {
+                        Swal.close();
+                        console.error('Save error:', xhr);
+                        Swal.fire('Error!', 'Something went wrong while saving.', 'error');
+                    }
+                });
+            }
+        });
+    }
+    // Attach click event to save button
+    $(document).on('click', '#savePaymentsBtn', function () {
+        saveBulkPayments();
+    });
+
+    $(document).on('click', '#variance_tracking', function () {
+        $('#variance_modal').modal('show');
+    });
+
+    var variance_table = $("#variance_table").DataTable({
+        columnDefs: [{ targets: '_all', orderable: true }],
+        lengthMenu: [10, 25, 50, 100],
+        processing: true,
+        serverSide: true,
+        searching: true,
+        ordering: true,
+        autoWidth: false,
+        ajax: {
+            url: '<?php echo site_url('Monitoring_cont/get_variance_data'); ?>',
+            type: 'POST',
+            data: function (d) {
+                d.start = d.start || 0;
+                d.length = d.length || 10;
+            },
+            dataType: 'json',
+            error: function (xhr, status, error) {
+                console.error("AJAX request failed: " + error);
+            },
+            dataSrc: function (response) {
+                function formatPeso(num) {
+                    if (!num && num !== 0) return '—';
+                    return '₱ ' + parseFloat(num).toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+
+                $('#total_over').text(formatPeso(response.total_over));
+                $('#total_short').text(formatPeso(response.total_short));
+
+                return response.data;
+            },
+        },
+        columns: [
+            { data: 'date_added', class: 'text-center' },
+            {
+                data: 'over',
+                class: 'text-center',
+                render: function (data, type, row) {
+                    if (type === 'display') {
+                        if (!data && data !== 0) return '—';
+                        return '₱ ' + parseFloat(data).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                    return data;
+                }
+            },
+            {
+                data: 'short',
+                class: 'text-center',
+                render: function (data, type, row) {
+                    if (type === 'display') {
+                        if (!data && data !== 0) return '—';
+                        return '₱ ' + parseFloat(data).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                    return data;
+                }
+            },
+            {
+                data: 'id',
+                orderable: false,
+                className: 'text-center',
+                render: function (data, type, row) {
+                    return `
+                        <button class="btn btn-sm btn-success edit-btn" data-id="${data}" data-date="${row.date_added}" data-over="${row.over}" data-short="${row.short}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-btn" data-id="${data}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                `;
+                }
+            }
+        ]
+    });
+
+    function openAddVariance() {
+        $('#addVarianceModal').modal('show');
+
+        // Remove previous event handler to avoid duplicate submissions
+        $('#addVariance').off('click').on('click', function () {
+            const over = $('#variance_over').val();
+            const short = $('#variance_short').val();
+            const date = $('#variance_date').val();
+
+            // Validation
+            if (!over && !short) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please enter either Over or Short amount',
+                    confirmButtonColor: '#3085d6'
+                });
+                return;
+            }
+
+            if (!date) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please select a date',
+                    confirmButtonColor: '#3085d6'
+                });
+                return;
+            }
+
+            // Confirmation dialog
+            Swal.fire({
+                title: 'Confirm Addition',
+                text: `Are you sure you want to add this variance record?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, add it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading state
+                    Swal.fire({
+                        title: 'Processing...',
+                        text: 'Please wait',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: "<?php echo base_url('Monitoring_cont/add_variance'); ?>",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            over: over,
+                            short: short,
+                            date: date,
+                        },
+                        success: function (res) {
+                            if (res.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: res.message,
+                                    showConfirmButton: false,
+                                    timer: 500,
+                                    timerProgressBar: true,
+                                });
+                                variance_table.ajax.reload();
+                                $('#addVarianceModal').modal('hide');
+                                resetVarianceForm();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: res.message || 'Failed to add variance record',
+                                    confirmButtonColor: '#3085d6'
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'An error occurred while processing your request',
+                                confirmButtonColor: '#3085d6'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    $('#variance_table').on('click', '.edit-btn', function () {
+        const $btn = $(this);
+        const $row = $btn.closest('tr');
+        const id = $btn.data('id');
+        const originalDate = $btn.data('date');
+        const originalOver = $btn.data('over');
+        const originalShort = $btn.data('short');
+
+        // Get the cells to edit (date, over, short columns)
+        const $dateCell = $row.find('td:eq(0)');
+        const $overCell = $row.find('td:eq(1)');
+        const $shortCell = $row.find('td:eq(2)');
+        const $actionCell = $row.find('td:eq(3)');
+
+        // Store original values
+        $row.data('original-date', originalDate);
+        $row.data('original-over', originalOver);
+        $row.data('original-short', originalShort);
+        $row.data('id', id);
+
+        // Replace text with input fields
+        $dateCell.html(`<input type="date" class="form-control form-control-sm edit-date" value="${originalDate}">`);
+        $overCell.html(`<input type="number" class="form-control form-control-sm edit-over" value="${originalOver}" step="0.01" min="0">`);
+        $shortCell.html(`<input type="number" class="form-control form-control-sm edit-short" value="${originalShort}" step="0.01" min="0">`);
+
+        // Replace buttons with Save and Cancel
+        $actionCell.html(`
+            <div>
+                <button class="btn btn-sm btn-primary save-btn" data-id="${id}">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="btn btn-sm btn-secondary cancel-btn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        `);
+
+        $('.edit-over').on('input', function () {
+            if ($(this).val() > 0 && $(this).val() !== '') {
+                $('.edit-short').val(0);
+            }
+        });
+
+        $('.edit-short').on('input', function () {
+            if ($(this).val() > 0 && $(this).val() !== '') {
+                $('.edit-over').val(0);
+            }
+        });
+    });
+
+    $('#variance_table').on('click', '.save-btn', function () {
+        const $btn = $(this);
+        const $row = $btn.closest('tr');
+        const id = $btn.data('id');
+        const date = $row.find('.edit-date').val();
+        const over = $row.find('.edit-over').val() || 0;
+        const short = $row.find('.edit-short').val() || 0;
+
+        if (!date) {
+            Swal.fire('Error', 'Please select a date', 'error');
+            return;
+        }
+
+        if (over == 0 && short == 0) {
+            Swal.fire('Error', 'Please enter either Over or Short amount', 'error');
+            return;
+        }
+
+        if (over > 0 && short > 0) {
+            Swal.fire('Error', 'Please enter only one value (either Over OR Short, not both)', 'error');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Updating...',
+            text: 'Please wait',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '<?php echo base_url('Monitoring_cont/update_variance'); ?>',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id,
+                date: date,
+                over: over,
+                short: short
+            },
+            success: function (res) {
+                if (res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: res.message,
+                        showConfirmButton: false,
+                        timer: 500
+                    });
+                    variance_table.ajax.reload();
+                } else {
+                    Swal.fire('Error!', res.message, 'error');
+                }
+            },
+            error: function () {
+                Swal.fire('Error!', 'Failed to update variance record', 'error');
+            }
+        });
+    });
+
+    // Cancel button click - restore original values
+    $('#variance_table').on('click', '.cancel-btn', function () {
+        const $btn = $(this);
+        const $row = $btn.closest('tr');
+        const id = $row.data('id');
+        const originalDate = $row.data('original-date');
+        const originalOver = $row.data('original-over');
+        const originalShort = $row.data('original-short');
+
+        // Restore original values
+        $row.find('td:eq(0)').html(originalDate);
+        $row.find('td:eq(1)').html(originalOver ? '₱ ' + parseFloat(originalOver).toLocaleString('en-US', { minimumFractionDigits: 2 }) : '—');
+        $row.find('td:eq(2)').html(originalShort ? '₱ ' + parseFloat(originalShort).toLocaleString('en-US', { minimumFractionDigits: 2 }) : '—');
+
+        // Restore original buttons
+        $row.find('td:eq(3)').html(`
+            <div>
+                <button class="btn btn-sm btn-success edit-btn" data-id="${id}" data-date="${originalDate}" data-over="${originalOver}" data-short="${originalShort}">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-danger delete-btn" data-id="${id}">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        `);
+    });
+
+    // Delete button click with confirmation
+    $('#variance_table').on('click', '.delete-btn', function () {
+        const $btn = $(this);
+        const id = $btn.data('id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: 'Please wait',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '<?php echo base_url('Monitoring_cont/delete_variance'); ?>',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { id: id },
+                    success: function (res) {
+                        if (res.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: res.message,
+                                showConfirmButton: false,
+                                timer: 500
+                            });
+                            variance_table.ajax.reload();
+                        } else {
+                            Swal.fire('Error!', res.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Error!', 'Failed to delete variance record', 'error');
+                    }
+                });
+            }
+        });
+    });
+
+    function resetVarianceForm() {
+        $('#variance_over').val("");
+        $('#variance_short').val("");
+        $('#variance_date').val('<?= date('Y-m-d') ?>');
+    }
+
+    $('#addVarianceModal').on('hidden.bs.modal', function () {
+        resetVarianceForm();
+    });
 </script>

@@ -107,7 +107,7 @@
                                     <h6 class="card-title"><i class="fas fa-exclamation-triangle"></i> Low Stock Alert
                                     </h6>
                                     <h2 class="mb-0">0</h2>
-                                    <small>Dried fish types below 10kg</small>
+                                    <small>Dried fish types below 50kg</small>
                                 </div>
                             </div>
                         </div>
@@ -2411,6 +2411,9 @@
 
         // Update Total Rice Stock Card
         $('#total-fish-stock .mb-0').text(summary.total_kg.toLocaleString() + ' KG');
+
+        $('#low-fish-stock .mb-0').text(summary.low_stock_count);
+        $('#low-fish-stock small').text('Dried Fish types below 50kg');
 
         if (summary.low_stock_count > 0) {
             $('#low-fish-stock').removeClass('bg-warning').addClass('bg-danger text-white');

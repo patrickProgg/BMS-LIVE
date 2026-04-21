@@ -48,6 +48,7 @@ class Monitoring_cont extends CI_Controller
         ');
 
         $this->db->from('tbl_client');
+        $this->db->where('status', '0');
 
         $this->db->group_by('id');
 
@@ -1730,38 +1731,94 @@ class Monitoring_cont extends CI_Controller
     //         echo json_encode($response);
 //     }
 
+    // public function get_bulk_payment()
+    // {
+    //     $date = $this->input->post('date');
+
+    //     $datePlusOne = date('Y-m-d', strtotime($date . ' -1 day'));
+
+    //     $this->db->select('
+    //         a.id as loan_id,
+    //         a.start_date,
+    //         a.due_date,
+    //         b.id as client_id,
+    //         b.full_name,
+    //         b.acc_no
+    //     ');
+
+    //     $this->db->from('tbl_loan as a');
+    //     $this->db->join('tbl_client as b', 'b.id = a.cl_id');
+    //     $this->db->where("'$datePlusOne' BETWEEN a.start_date AND a.due_date");
+    //     $this->db->where('a.status', 'ongoing');
+    //     $this->db->where('b.status !=', '1');
+    //     $this->db->order_by('b.acc_no', 'ASC');
+
+    //     $query = $this->db->get();
+    //     $clients = $query->result_array();
+
+    //     foreach ($clients as &$client) {
+    //         $loan_id = $client['loan_id'];
+
+    //         $this->db->select('amt');
+    //         $this->db->from('tbl_payment');
+    //         $this->db->where('loan_id', $loan_id);
+    //         $this->db->where('payment_for', $date);
+    //         $payment_query = $this->db->get();
+
+    //         if ($payment_query->num_rows() > 0) {
+    //             $payment = $payment_query->row();
+    //             $client['amt'] = floatval($payment->amt);
+    //         } else {
+    //             $client['amt'] = 0;
+    //         }
+    //     }
+
+    //     $response = [
+    //         'data' => $clients
+    //     ];
+
+    //     echo json_encode($response);
+    // }
+
     public function get_bulk_payment()
     {
         $date = $this->input->post('date');
 
-        $datePlusOne = date('Y-m-d', strtotime($date . ' -1 day'));
+        // Calculate previous day
+        $previous_date = date('Y-m-d', strtotime($date . ' -1 day'));
+
+        $response = [
+            'fish_data' => [],
+            'rice_data' => []
+        ];
 
         $this->db->select('
-            a.id as loan_id,
-            a.start_date,
-            a.due_date,
-            b.id as client_id,
-            b.full_name,
-            b.acc_no
-        ');
+        a.id as loan_id,
+        b.id as client_id,
+        b.full_name,
+        b.acc_no
+    ');
 
-        $this->db->from('tbl_loan as a');
+        $this->db->from('tbl_fish_transaction as a');
         $this->db->join('tbl_client as b', 'b.id = a.cl_id');
-        $this->db->where("'$datePlusOne' BETWEEN a.start_date AND a.due_date");
         $this->db->where('a.status', 'ongoing');
+        $this->db->where("'$previous_date' BETWEEN a.date_added AND a.due_date", NULL, FALSE);
         $this->db->where('b.status !=', '1');
         $this->db->order_by('b.acc_no', 'ASC');
+        $this->db->group_by('a.id');
 
-        $query = $this->db->get();
-        $clients = $query->result_array();
+        $fish_query = $this->db->get();
+        $fish_clients = $fish_query->result_array();
 
-        foreach ($clients as &$client) {
+        foreach ($fish_clients as &$client) {
             $loan_id = $client['loan_id'];
 
+            // Check if payment already exists for this date
             $this->db->select('amt');
             $this->db->from('tbl_payment');
-            $this->db->where('loan_id', $loan_id);
+            $this->db->where('trans_id', $loan_id);
             $this->db->where('payment_for', $date);
+            $this->db->where('type', 'fish');
             $payment_query = $this->db->get();
 
             if ($payment_query->num_rows() > 0) {
@@ -1772,9 +1829,47 @@ class Monitoring_cont extends CI_Controller
             }
         }
 
-        $response = [
-            'data' => $clients
-        ];
+        $response['fish_data'] = $fish_clients;
+
+        // Get RICE credits
+        $this->db->select('
+        a.id as loan_id,
+        b.id as client_id,
+        b.full_name,
+        b.acc_no
+    ');
+
+        $this->db->from('tbl_rice_transaction as a');
+        $this->db->join('tbl_client as b', 'b.id = a.cl_id');
+        $this->db->where('a.status', 'ongoing');
+        $this->db->where("'$previous_date' BETWEEN a.date_added AND a.due_date", NULL, FALSE);
+        $this->db->where('b.status !=', '1');
+        $this->db->order_by('b.acc_no', 'ASC');
+        $this->db->group_by('a.id');
+
+        $rice_query = $this->db->get();
+        $rice_clients = $rice_query->result_array();
+
+        foreach ($rice_clients as &$client) {
+            $loan_id = $client['loan_id'];
+
+            // Check if payment already exists for this date
+            $this->db->select('amt');
+            $this->db->from('tbl_payment');
+            $this->db->where('trans_id', $loan_id);
+            $this->db->where('payment_for', $date);
+            $this->db->where('type', 'rice');
+            $payment_query = $this->db->get();
+
+            if ($payment_query->num_rows() > 0) {
+                $payment = $payment_query->row();
+                $client['amt'] = floatval($payment->amt);
+            } else {
+                $client['amt'] = 0;
+            }
+        }
+
+        $response['rice_data'] = $rice_clients;
 
         echo json_encode($response);
     }
@@ -1911,58 +2006,91 @@ class Monitoring_cont extends CI_Controller
     //     }
     // }
 
+    // public function save_bulk_payments()
+    // {
+    //     $date = $this->input->post('date');
+    //     $payments = $this->input->post('payments');
+
+    //     $success_count = 0;
+    //     $error_count = 0;
+
+    //     if ($payments && is_array($payments)) {
+    //         foreach ($payments as $payment) {
+
+    //             if (empty($payment['client_id']) || empty($payment['loan_id']) || empty($payment['amount'])) {
+    //                 $error_count++;
+    //                 continue;
+    //             }
+
+    //             $payment_data = array(
+    //                 'loan_id' => $payment['loan_id'],
+    //                 'payment_for' => $date,
+    //                 'amt' => $payment['amount'],
+    //             );
+
+    //             $this->db->where('loan_id', $payment['loan_id']);
+    //             $this->db->where('payment_for', $date);
+    //             $existing = $this->db->get('tbl_payment')->row();
+
+    //             if ($existing) {
+    //                 $this->db->where('loan_id', $payment['loan_id']);
+    //                 $this->db->where('payment_for', $date);
+
+    //                 if ($this->db->update('tbl_payment', $payment_data)) {
+    //                     $success_count++;
+    //                 } else {
+    //                     $error_count++;
+    //                 }
+
+    //             } else {
+    //                 if ($this->db->insert('tbl_payment', $payment_data)) {
+    //                     $success_count++;
+    //                 } else {
+    //                     $error_count++;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     $response = array(
+    //         'success' => true,
+    //         'message' => "Successfully saved $success_count payment(s). " . ($error_count > 0 ? "$error_count payment(s) failed." : "")
+    //     );
+
+    //     echo json_encode($response);
+    // }
+
     public function save_bulk_payments()
     {
-        $date = $this->input->post('date');
         $payments = $this->input->post('payments');
+        $date = $this->input->post('date');
 
-        $success_count = 0;
-        $error_count = 0;
-
-        if ($payments && is_array($payments)) {
-            foreach ($payments as $payment) {
-
-                if (empty($payment['client_id']) || empty($payment['loan_id']) || empty($payment['amount'])) {
-                    $error_count++;
-                    continue;
-                }
-
-                $payment_data = array(
-                    'loan_id' => $payment['loan_id'],
-                    'payment_for' => $date,
-                    'amt' => $payment['amount'],
-                );
-
-                $this->db->where('loan_id', $payment['loan_id']);
-                $this->db->where('payment_for', $date);
-                $existing = $this->db->get('tbl_payment')->row();
-
-                if ($existing) {
-                    $this->db->where('loan_id', $payment['loan_id']);
-                    $this->db->where('payment_for', $date);
-
-                    if ($this->db->update('tbl_payment', $payment_data)) {
-                        $success_count++;
-                    } else {
-                        $error_count++;
-                    }
-
-                } else {
-                    if ($this->db->insert('tbl_payment', $payment_data)) {
-                        $success_count++;
-                    } else {
-                        $error_count++;
-                    }
-                }
-            }
+        if (empty($payments)) {
+            echo json_encode(['success' => false, 'message' => 'No payments to save']);
+            return;
         }
 
-        $response = array(
-            'success' => true,
-            'message' => "Successfully saved $success_count payment(s). " . ($error_count > 0 ? "$error_count payment(s) failed." : "")
-        );
+        $this->db->trans_start();
 
-        echo json_encode($response);
+        foreach ($payments as $payment) {
+            $data = array(
+                'trans_id' => $payment['loan_id'],
+                'amt' => $payment['amount'],
+                'payment_for' => $date,
+                'type' => $payment['type'],
+                'date_added' => date('Y-m-d H:i:s')
+            );
+
+            $this->db->insert('tbl_payment', $data);
+        }
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            echo json_encode(['success' => false, 'message' => 'Failed to save payments']);
+        } else {
+            echo json_encode(['success' => true, 'message' => 'Payments saved successfully']);
+        }
     }
 
     public function add_variance()
@@ -2546,6 +2674,111 @@ class Monitoring_cont extends CI_Controller
             'success' => true,
             'message' => ucfirst($type) . ' loan status updated to ' . strtoupper($status),
             'status' => $status
+        ]);
+    }
+
+    public function get_loan_statuses()
+    {
+        $cl_id = $this->input->post('cl_id');
+
+        $this->db->select('id, status');
+        $this->db->from('tbl_fish_transaction');
+        $this->db->where('cl_id', $cl_id);
+        $fish_query = $this->db->get();
+
+        $this->db->select('id, status');
+        $this->db->from('tbl_rice_transaction');
+        $this->db->where('cl_id', $cl_id);
+        $rice_query = $this->db->get();
+
+        echo json_encode([
+            'success' => true,
+            'fish_loans' => $fish_query->result(),
+            'rice_loans' => $rice_query->result()
+        ]);
+    }
+
+    public function delete_fish_loan_id()
+    {
+        $loan_id = $this->input->post('loan_id');
+
+        $this->db->select('fish_id, qty');
+        $this->db->from('tbl_fish_transaction_details');
+        $this->db->where('trans_id', $loan_id);
+        $query = $this->db->get();
+        $fish_details = $query->result();
+
+        $this->db->trans_start();
+
+        foreach ($fish_details as $item) {
+
+            $stock_data = array(
+                'fish_id' => $item->fish_id,
+                'qty' => $item->qty,
+                'trans_type' => 'in',
+                'trans_date' => date('Y-m-d')
+            );
+
+            $this->db->insert('tbl_fish_stock', $stock_data);
+        }
+
+        $this->db->where('trans_id', $loan_id);
+        $this->db->delete('tbl_fish_transaction_details');
+
+        $this->db->where('trans_id', $loan_id);
+        $this->db->where('type', "fish");
+        $this->db->delete('tbl_payment');
+
+        $this->db->where('id', $loan_id);
+        $this->db->delete('tbl_fish_transaction');
+
+        $this->db->trans_complete();
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Fish credit deleted successfully and stock updated'
+        ]);
+    }
+
+    public function delete_rice_loan_id()
+    {
+        $loan_id = $this->input->post('loan_id');
+
+        $this->db->select('rice_id, qty');
+        $this->db->from('tbl_rice_transaction_details');
+        $this->db->where('trans_id', $loan_id);
+        $query = $this->db->get();
+        $rice_details = $query->result();
+
+        $this->db->trans_start();
+
+        foreach ($rice_details as $item) {
+
+            $stock_data = array(
+                'rice_id' => $item->rice_id,
+                'qty' => $item->qty,
+                'trans_type' => 'in',
+                'trans_date' => date('Y-m-d')
+            );
+
+            $this->db->insert('tbl_rice_stock', $stock_data);
+        }
+
+        $this->db->where('trans_id', $loan_id);
+        $this->db->delete('tbl_rice_transaction_details');
+
+        $this->db->where('trans_id', $loan_id);
+        $this->db->where('type', "rice");
+        $this->db->delete('tbl_payment');
+
+        $this->db->where('id', $loan_id);
+        $this->db->delete('tbl_rice_transaction');
+
+        $this->db->trans_complete();
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Rice credit deleted successfully and stock updated'
         ]);
     }
 }
