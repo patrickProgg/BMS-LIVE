@@ -3184,8 +3184,6 @@
                     }
 
                     getLoanStatuses();
-
-                    Swal.close();
                 }
             }
         });
@@ -3238,7 +3236,7 @@
                 } else {
                     $('#addNewLoanRice').show();
                 }
-
+                Swal.close();
             }
         });
     }
