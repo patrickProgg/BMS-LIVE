@@ -1526,8 +1526,10 @@
         $('#viewLoaner').modal('show');
 
         Swal.fire({
-            title: 'Loading...',
+            showConfirmButton: false,
             allowOutsideClick: false,
+            background: 'transparent',
+            boxShadow: 'none',
             didOpen: () => {
                 Swal.showLoading();
             }
@@ -1610,8 +1612,10 @@
                     let fishDetailsForDelete = [];
 
                     Swal.fire({
-                        title: 'Loading...',
+                        showConfirmButton: false,
                         allowOutsideClick: false,
+                        background: 'transparent',
+                        boxShadow: 'none',
                         didOpen: () => {
                             Swal.showLoading();
                         }
@@ -2022,13 +2026,15 @@
         let start = new Date(startDate);
         let end = new Date(dueDate);
 
-        // Swal.fire({
-        //     title: 'Loading...',
-        //     allowOutsideClick: false,
-        //     didOpen: () => {
-        //         Swal.showLoading();
-        //     }
-        // });
+        Swal.fire({
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            background: 'transparent',
+            boxShadow: 'none',
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         $.ajax({
             url: '<?php echo site_url('Monitoring_cont/get_payment_history_fish'); ?>',
