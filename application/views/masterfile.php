@@ -87,9 +87,7 @@
                         </div>
                     </div>
 
-                    <!-- Summary Cards -->
                     <div class="row g-4 mb-2">
-                        <!-- Total Rice Stock Card -->
                         <div class="col-md-3">
                             <div id="total-fish-stock" class="card bg-success text-white card-hover">
                                 <div class="card-body">
@@ -100,9 +98,8 @@
                             </div>
                         </div>
 
-                        <!-- Low Stock Alert Card -->
                         <div class="col-md-3">
-                            <div id="low-fish-stock" class="card bg-warning text-dark card-hover">
+                            <div id="low-fish-stock" class="card bg-danger text-dark card-hover">
                                 <div class="card-body">
                                     <h6 class="card-title"><i class="fas fa-exclamation-triangle"></i> Low Stock Alert
                                     </h6>
@@ -178,7 +175,7 @@
 
                         <!-- Low Stock Alert Card -->
                         <div class="col-md-3">
-                            <div id="low-stock" class="card bg-warning text-dark card-hover">
+                            <div id="low-stock" class="card bg-danger text-dark card-hover">
                                 <div class="card-body">
                                     <h6 class="card-title"><i class="fas fa-exclamation-triangle"></i> Low Stock Alert
                                     </h6>
@@ -872,13 +869,15 @@
                     <table class="table table-sm table-bordered">
                         <thead class="table-light">
                             <tr>
-                                <th>Date</th>
-                                <th>Transaction Type</th>
-                                <th>Quantity (Kg)</th>
+                                <th style="width:20%">Date</th>
+                                <th style="width:20%">Transaction Type</th>
+                                <th style="width:20%">Quantity (Kg)</th>
+                                <th style="width:20%">Price/KG</th>
+                                <th style="width:20%">Capital</th>
                             </tr>
                         </thead>
                         <tbody id="transaction-history-${safeId}">
-                            <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                            <tr><td colspan="5" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -934,7 +933,7 @@
                     displayFishTransactionsPage(fish_id, 1);
                 } else {
                     console.log("No transactions found");
-                    $('#transaction-history-' + safeId).html('<tr><td colspan="3" class="text-center">No transactions found</td></tr>');
+                    $('#transaction-history-' + safeId).html('<tr><td colspan="5" class="text-center">No transactions found</td></tr>');
                     $('#fish-pagination-' + safeId).hide();
                 }
             },
@@ -993,6 +992,8 @@
                     <td>${new Date(trans.trans_date).toLocaleDateString()}</td>
                     <td><span class="badge ${badgeClass}">${transText}</span></td>
                     <td>${trans.qty_kg} kg</td>
+                    <td>${trans.price_per_kg == 0 ? '' : '₱ ' + trans.price_per_kg.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                    <td>${trans.capital == 0 ? '' : '₱ ' + trans.capital.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                 </tr>
             `);
         });
@@ -1256,139 +1257,146 @@
         Swal.fire({
             title: `<i class="fas fa-weight-hanging me-2 text-primary"></i> Add Stock — ${fishType}`,
             html: `
-            <div class="text-start">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Fish Type:</label>
-                    <input type="text" class="form-control" value="${fishType}" readonly>
+        <div class="text-start">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Fish Type:</label>
+                <input type="text" class="form-control" value="${fishType}" readonly>
+            </div>
+            
+            <label class="form-label fw-bold text-primary mb-2">
+                <i class="fas fa-weight-hanging me-1"></i> Enter Weight:
+            </label>
+            
+            <div class="row g-1">
+                <!-- Kilograms -->
+                <div class="col-12">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text bg-primary text-white">
+                            <i class="fas fa-box"></i>
+                        </span>
+                        <input type="number" id="kg_input" class="form-control" 
+                               step="1" min="0" placeholder="0" value="0">
+                        <span class="input-group-text bg-light">
+                            kg
+                        </span>
+                    </div>
                 </div>
                 
-                <label class="form-label fw-bold text-primary mb-2">
-                    <i class="fas fa-weight-hanging me-1"></i> Enter Weight:
-                </label>
+                <!-- Fraction -->
+                <div class="col-12">
+                    <label class="small text-muted">Optional: Add Fraction</label>
+                    <div class="d-flex gap-2 mb-2 flex-wrap">
+                        <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.125">⅛ kg (125g)</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.250">¼ kg (250g)</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.333">⅓ kg (333g)</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.500">½ kg (500g)</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.667">⅔ kg (667g)</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.750">¾ kg (750g)</button>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-chart-pie"></i>
+                        </span>
+                        <input type="text" id="fraction_input" class="form-control" 
+                               placeholder="Or type fraction (e.g., 1/2, 3/4, 2/3)">
+                        <span class="input-group-text bg-light">
+                            fraction
+                        </span>
+                    </div>
+                </div>
                 
-                <div class="row g-1">
-                    <!-- Kilograms -->
-                    <div class="col-12">
-                        <div class="input-group mb-2">
-                            <span class="input-group-text bg-primary text-white">
-                                <i class="fas fa-box"></i>
-                            </span>
-                            <input type="number" id="kg_input" class="form-control" 
-                                   step="1" min="0" placeholder="0" value="0">
-                            <span class="input-group-text bg-light">
-                                kg
-                            </span>
-                        </div>
+                <!-- Grams -->
+                <div class="col-12">
+                    <label class="small text-muted">Optional: Add Grams</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-primary text-white">
+                            <i class="fas fa-weight-hanging"></i>
+                        </span>
+                        <input type="number" id="grams_input" class="form-control" 
+                               step="1" min="0" max="999" placeholder="0" value="0">
+                        <span class="input-group-text bg-light">
+                            grams
+                        </span>
                     </div>
-                    
-                    <!-- Fraction (½, ¼, ¾, etc.) -->
-                    <div class="col-12">
-                        <label class="small text-muted">Optional: Add Fraction</label>
-                        <div class="d-flex gap-2 mb-2 flex-wrap">
-                            <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.125">⅛ kg (125g)</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.250">¼ kg (250g)</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.333">⅓ kg (333g)</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.500">½ kg (500g)</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.667">⅔ kg (667g)</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm fraction-btn" data-value="0.750">¾ kg (750g)</button>
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light">
-                                <i class="fas fa-chart-pie"></i>
-                            </span>
-                            <input type="text" id="fraction_input" class="form-control" 
-                                   placeholder="Or type fraction (e.g., 1/2, 3/4, 2/3)">
-                            <span class="input-group-text bg-light">
-                                fraction
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <!-- Grams -->
-                    <div class="col-12">
-                        <label class="small text-muted">Optional: Add Grams</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-primary text-white">
-                                <i class="fas fa-weight-hanging"></i>
-                            </span>
-                            <input type="number" id="grams_input" class="form-control" 
-                                   step="1" min="0" max="999" placeholder="0" value="0">
-                            <span class="input-group-text bg-light">
-                                grams
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="result-box text-center p-3 bg-light rounded mt-3">
-                    <strong>Total Weight:</strong> 
-                    <span id="total_preview" class="fw-bold text-primary fs-4">0.000 kg</span>
-                </div>
-
-                <div class="alert alert-info mt-3 py-2">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>Examples:</strong><br>
-                    • 1kg + ¾ + 2g = <strong>1.752 kg</strong><br>
-                    • 2kg + ½ + 250g = <strong>2.750 kg</strong><br>
-                    • 5kg + ⅓ = <strong>5.333 kg</strong>
                 </div>
             </div>
-        `,
+
+            <div class="result-box text-center p-3 bg-light rounded mt-3">
+                <strong>Total Weight:</strong> 
+                <span id="total_preview" class="fw-bold text-primary fs-4">0.000 kg</span>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-6">
+                    <label class="small text-muted">Price per KG</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-primary text-white">
+                            <i class="fas fa-tag"></i>
+                        </span>
+                        <input type="number" id="price_per_kg" class="form-control" 
+                                step="0.01" min="0" placeholder="0.00" value="0">
+                        <span class="input-group-text bg-light">
+                            ₱/kg
+                        </span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label class="small text-muted">Capital (Auto-calculated):</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-success text-white">
+                            <i class="fas fa-coins"></i>
+                        </span>
+                        <input type="number" id="capital_amount" class="form-control" 
+                                step="0.01" min="0" placeholder="0.00" value="0" readonly
+                                style="background-color: #e9ecef;">
+                        <span class="input-group-text bg-light">
+                            ₱
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info mt-3 mb-0">
+                <small><i class="fas fa-info-circle"></i> Capital = Total Weight × Price per KG</small>
+            </div>
+        </div>
+    `,
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-save me-2"></i> Add Stock',
             cancelButtonText: '<i class="fas fa-times me-2"></i> Cancel',
             confirmButtonColor: '#007bff',
             cancelButtonColor: '#6c757d',
+            width: '600px',
             didOpen: () => {
                 const kgInput = document.getElementById('kg_input');
                 const fractionInput = document.getElementById('fraction_input');
                 const gramsInput = document.getElementById('grams_input');
                 const preview = document.getElementById('total_preview');
+                const pricePerKgInput = document.getElementById('price_per_kg');
+                const capitalInput = document.getElementById('capital_amount');
 
-                // Function to convert fraction string to decimal
                 function fractionToDecimal(fraction) {
                     if (!fraction) return 0;
-
-                    // Remove spaces
                     fraction = fraction.toString().trim();
 
-                    // Check for common fraction symbols
                     const fractions = {
-                        '½': 0.5,
-                        '¼': 0.25,
-                        '¾': 0.75,
-                        '⅓': 0.333,
-                        '⅔': 0.667,
-                        '⅛': 0.125,
-                        '⅜': 0.375,
-                        '⅝': 0.625,
-                        '⅞': 0.875
+                        '½': 0.5, '¼': 0.25, '¾': 0.75,
+                        '⅓': 0.333, '⅔': 0.667,
+                        '⅛': 0.125, '⅜': 0.375, '⅝': 0.625, '⅞': 0.875
                     };
 
-                    if (fractions[fraction]) {
-                        return fractions[fraction];
-                    }
+                    if (fractions[fraction]) return fractions[fraction];
 
-                    // Check for fraction like "1/2", "3/4"
                     const fractionMatch = fraction.match(/^(\d+)\/(\d+)$/);
                     if (fractionMatch) {
                         const numerator = parseFloat(fractionMatch[1]);
                         const denominator = parseFloat(fractionMatch[2]);
-                        if (denominator !== 0) {
-                            return numerator / denominator;
-                        }
+                        if (denominator !== 0) return numerator / denominator;
                     }
 
-                    // Check for decimal
                     const decimal = parseFloat(fraction);
-                    if (!isNaN(decimal)) {
-                        return decimal;
-                    }
-
-                    return 0;
+                    return isNaN(decimal) ? 0 : decimal;
                 }
 
-                // Update total preview
                 function updatePreview() {
                     let kg = parseFloat(kgInput.value) || 0;
                     let fraction = fractionToDecimal(fractionInput.value);
@@ -1398,14 +1406,18 @@
                     totalKg = Math.round(totalKg * 1000) / 1000;
 
                     preview.textContent = totalKg.toFixed(3) + ' kg';
+
+                    // Auto-calculate capital
+                    let pricePerKg = parseFloat(pricePerKgInput.value) || 0;
+                    let capital = totalKg * pricePerKg;
+                    capitalInput.value = capital.toFixed(2);
                 }
 
-                // Add event listeners
                 kgInput.addEventListener('input', updatePreview);
                 fractionInput.addEventListener('input', updatePreview);
                 gramsInput.addEventListener('input', updatePreview);
+                pricePerKgInput.addEventListener('input', updatePreview);
 
-                // Add fraction button handlers
                 document.querySelectorAll('.fraction-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const value = btn.getAttribute('data-value');
@@ -1420,8 +1432,9 @@
                 let kg = parseFloat(document.getElementById('kg_input').value) || 0;
                 let fractionInput = document.getElementById('fraction_input').value;
                 let grams = parseFloat(document.getElementById('grams_input').value) || 0;
+                let pricePerKg = parseFloat(document.getElementById('price_per_kg').value) || 0;
+                let capital = parseFloat(document.getElementById('capital_amount').value) || 0;
 
-                // Convert fraction to decimal
                 function fractionToDecimal(fraction) {
                     if (!fraction) return 0;
                     fraction = fraction.toString().trim();
@@ -1447,28 +1460,28 @@
 
                 let fraction = fractionToDecimal(fractionInput);
 
-                // Validate grams
                 if (grams < 0 || grams > 999) {
                     Swal.showValidationMessage('Grams must be between 0 and 999');
                     return false;
                 }
 
-                // Calculate total
-                let totalKg = kg + fraction + gramsToKg(grams);
+                let totalKg = kg + fraction + (grams / 1000);
 
                 if (totalKg <= 0) {
                     Swal.showValidationMessage('Please enter a valid weight greater than 0');
                     return false;
                 }
 
-                // Round to 3 decimal places
+                if (pricePerKg <= 0) {
+                    Swal.showValidationMessage('Please enter price per KG greater than 0');
+                    return false;
+                }
+
                 totalKg = Math.round(totalKg * 1000) / 1000;
 
-                // Build display text
                 let displayParts = [];
                 if (kg > 0) displayParts.push(kg + 'kg');
                 if (fraction > 0) {
-                    // Find fraction symbol
                     const fractionMap = {
                         0.5: '½', 0.25: '¼', 0.75: '¾',
                         0.333: '⅓', 0.667: '⅔',
@@ -1487,17 +1500,19 @@
 
                 return {
                     quantity: totalKg,
-                    display: displayText
+                    display: displayText,
+                    price_per_kg: pricePerKg,
+                    capital: capital
                 };
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                addStockQuantity(itemId, result.value.quantity, result.value.display, fishType);
+                addStockQuantity(itemId, result.value.quantity, result.value.display, fishType, result.value.price_per_kg, result.value.capital);
             }
         });
     }
 
-    function addStockQuantity(itemId, quantity, displayText, itemLabel) {
+    function addStockQuantity(itemId, quantity, displayText, itemLabel, price_per_kg, capital) {
         Swal.fire({
             title: '<i class="fas fa-spinner fa-pulse me-2"></i> Processing',
             html: 'Adding stock to inventory...',
@@ -1513,7 +1528,9 @@
             type: 'POST',
             data: {
                 item_id: itemId,
-                added_qty: quantity
+                added_qty: quantity,
+                price_per_kg: price_per_kg,
+                capital: capital
             },
             dataType: 'json',
             success: function (response) {
@@ -1714,39 +1731,111 @@
         Swal.fire({
             title: '<i class="fas fa-seedling me-2 text-success"></i> Add Rice Stock',
             html: `
-                <div class="text-start">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Rice Type:</label>
-                        <input type="text" class="form-control" value="${riceType}" readonly>
+            <div class="text-start">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Rice Type:</label>
+                    <input type="text" class="form-control" value="${riceType}" readonly>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">25kg Sacks:</label>
+                        <input type="number" id="qty_25kg" class="form-control" min="0" value="0" placeholder="0">
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">25kg Sacks:</label>
-                            <input type="number" id="qty_25kg" class="form-control" min="0" value="0" placeholder="0">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">50kg Sacks:</label>
-                            <input type="number" id="qty_50kg" class="form-control" min="0" value="0" placeholder="0">
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <label class="form-label fw-bold">Transaction Date:</label>
-                        <input type="date" id="trans_date" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">50kg Sacks:</label>
+                        <input type="number" id="qty_50kg" class="form-control" min="0" value="0" placeholder="0">
                     </div>
                 </div>
-            `,
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="small text-muted">Price per KG</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-primary text-white">
+                                <i class="fas fa-tag"></i>
+                            </span>
+                            <input type="number" id="price_per_kg" class="form-control" 
+                                   step="0.01" min="0" placeholder="0.00" value="0">
+                            <span class="input-group-text bg-light">
+                                ₱/kg
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-muted">Capital (Auto-calculated):</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-success text-white">
+                                <i class="fas fa-coins"></i>
+                            </span>
+                            <input type="number" id="capital" class="form-control" 
+                                   step="0.01" min="0" placeholder="0.00" value="0" readonly 
+                                   style="background-color: #e9ecef;">
+                            <span class="input-group-text bg-light">
+                                ₱
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label class="form-label fw-bold">Transaction Date:</label>
+                    <input type="date" id="trans_date" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                </div>
+                <div class="alert alert-info mt-3 mb-0">
+                    <small><i class="fas fa-info-circle"></i> Capital = (25kg × quantity × price_per_kg) + (50kg × quantity × price_per_kg)</small>
+                </div>
+            </div>
+        `,
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-save me-2"></i> Add Stock',
             cancelButtonText: '<i class="fas fa-times me-2"></i> Cancel',
             confirmButtonColor: '#28a745',
             cancelButtonColor: '#6c757d',
+            width: '600px',
+            didOpen: () => {
+                const qty25Input = document.getElementById('qty_25kg');
+                const qty50Input = document.getElementById('qty_50kg');
+                const pricePerKgInput = document.getElementById('price_per_kg');
+                const capitalInput = document.getElementById('capital');
+
+                // Function to calculate capital
+                function calculateCapital() {
+                    const qty25 = parseInt(qty25Input.value) || 0;
+                    const qty50 = parseInt(qty50Input.value) || 0;
+                    const pricePerKg = parseFloat(pricePerKgInput.value) || 0;
+
+                    // Calculate total kg
+                    const totalKg25 = qty25 * 25;
+                    const totalKg50 = qty50 * 50;
+                    const totalKg = totalKg25 + totalKg50;
+
+                    // Calculate capital (price per kg × total kg)
+                    const capital = totalKg * pricePerKg;
+
+                    // Update capital field
+                    capitalInput.value = capital.toFixed(2);
+                }
+
+                // Add event listeners
+                qty25Input.addEventListener('input', calculateCapital);
+                qty50Input.addEventListener('input', calculateCapital);
+                pricePerKgInput.addEventListener('input', calculateCapital);
+
+                // Initial calculation
+                calculateCapital();
+            },
             preConfirm: () => {
                 const qty25 = parseInt(document.getElementById('qty_25kg').value) || 0;
                 const qty50 = parseInt(document.getElementById('qty_50kg').value) || 0;
+                const pricePerKg = parseFloat(document.getElementById('price_per_kg').value) || 0;
+                const capital = parseFloat(document.getElementById('capital').value) || 0;
                 const transDate = document.getElementById('trans_date').value;
 
                 if (qty25 === 0 && qty50 === 0) {
                     Swal.showValidationMessage('Please enter quantity for at least one sack type');
+                    return false;
+                }
+
+                if (pricePerKg <= 0) {
+                    Swal.showValidationMessage('Please enter price per KG greater than 0');
                     return false;
                 }
 
@@ -1755,11 +1844,17 @@
                     return false;
                 }
 
-                return { qty25, qty50, transDate };
+                return {
+                    qty25,
+                    qty50,
+                    pricePerKg,
+                    capital,
+                    transDate
+                };
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                const { qty25, qty50, transDate } = result.value;
+                const { qty25, qty50, pricePerKg, capital, transDate } = result.value;
                 let promises = [];
 
                 if (qty25 > 0) {
@@ -1767,6 +1862,8 @@
                         rice_type: riceType,
                         sack_type: '25kg',
                         quantity: qty25,
+                        price_per_kg: pricePerKg,
+                        capital: capital,
                         trans_date: transDate
                     }));
                 }
@@ -1776,6 +1873,8 @@
                         rice_type: riceType,
                         sack_type: '50kg',
                         quantity: qty50,
+                        price_per_kg: pricePerKg,
+                        capital: capital,
                         trans_date: transDate
                     }));
                 }
@@ -2162,15 +2261,17 @@
                     <table class="table table-sm table-bordered">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20%;">Date</th>
-                                <th style="width: 20%;">Transaction Type</th>
-                                <th style="width: 20%;">Quantity (Sacks)</th>
-                                <th style="width: 20%;">Sack Size</th>
-                                <th style="width: 20%;">Total KG</th>
+                                <th style="width: 16%;">Date</th>
+                                <th style="width: 14%;">Transaction Type</th>
+                                <th style="width: 14%;">Quantity (Sacks)</th>
+                                <th style="width: 14%;">Sack Size</th>
+                                <th style="width: 14%;">Total KG</th>
+                                <th style="width: 14%;">Price/KG</th>
+                                <th style="width: 14%;">Capital</th>
                             </tr>
                         </thead>
                         <tbody id="transaction-history-${safeId}">
-                            <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -2220,7 +2321,7 @@
                     displayTransactionsPage(riceType, 1);
                 } else {
                     console.log("No transactions found");
-                    $('#transaction-history-' + safeId).html('<tr><td colspan="5" class="text-center">No transactions found</td></tr>');
+                    $('#transaction-history-' + safeId).html('<tr><td colspan="8" class="text-center">No transactions found</td></tr>');
                     $('#pagination-' + safeId).hide();
                 }
             },
@@ -2281,6 +2382,8 @@
                     <td>${trans.qty}</td>
                     <td>${trans.sack_size}</td>
                     <td>${trans.total_kg} KG</td>
+                    <td>${trans.price_per_kg > 0 ? '₱ ' + parseFloat(trans.price_per_kg).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''}</td>
+                    <td>${trans.capital > 0 ? '₱ ' + parseFloat(trans.capital).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''}</td>
                 </tr>
             `);
         });
@@ -2395,13 +2498,6 @@
         // Update Low Stock Alert Card
         $('#low-stock .mb-0').text(summary.low_stock_count);
         $('#low-stock small').text('Rice types below 200kg');
-
-        // Optional: Change color if there are low stock items
-        if (summary.low_stock_count > 0) {
-            $('#low-stock').removeClass('bg-warning').addClass('bg-danger text-white');
-        } else {
-            $('#low-stock').removeClass('bg-danger').addClass('bg-warning text-dark');
-        }
     }
 
     function updateSummaryCardsFish(summary) {
@@ -2414,12 +2510,6 @@
 
         $('#low-fish-stock .mb-0').text(summary.low_stock_count);
         $('#low-fish-stock small').text('Dried Fish types below 50kg');
-
-        if (summary.low_stock_count > 0) {
-            $('#low-fish-stock').removeClass('bg-warning').addClass('bg-danger text-white');
-        } else {
-            $('#low-stock').removeClass('bg-danger').addClass('bg-warning text-dark');
-        }
     }
 
 

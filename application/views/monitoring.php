@@ -533,9 +533,9 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
-                                            <div></div>
+                                            <div style="width: 115px;"></div>
                                             <div>
-                                                Total: ₱ <b id="fish_total_payment">0.00</b>
+                                                Total: ₱ <b class="text-primary" id="fish_total_payment">0.00</b>
                                             </div>
                                             <div>
                                                 <button type="button" id="addNewLoanFish" class="btn btn-primary me-2"
@@ -643,9 +643,9 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
-                                            <div></div>
+                                            <div style="width: 115px;"></div>
                                             <div>
-                                                Total: ₱ <b id="rice_total_payment">0.00</b>
+                                                Total: ₱ <b class="text-primary" id="rice_total_payment">0.00</b>
                                             </div>
                                             <div>
                                                 <button type="button" id="addNewLoanRice"
@@ -1289,7 +1289,7 @@
         },
         columns: [
             {
-                data: 'id',
+                data: 'acc_no',
                 class: 'text-center'
             },
             {
@@ -3284,7 +3284,7 @@
             if (hasPayment) {
                 paymentColumn = '<span class="text-success p-2"> ₱ ' + existingPayment.toFixed(2) + '</span>';
             } else {
-                paymentColumn = '<input type="number" class="form-control payment-input-fish" ' +
+                paymentColumn = '<input type="number" class="form-control form-control-sm payment-input-fish" ' +
                     'data-loan-id="' + client.loan_id + '" ' +
                     'data-type="fish" ' +
                     'value="0" step="0.01" min="0">';
@@ -3319,7 +3319,7 @@
             if (hasPayment) {
                 paymentColumn = '<span class="text-success p-2"> ₱ ' + existingPayment.toFixed(2) + '</span>';
             } else {
-                paymentColumn = '<input type="number" class="form-control payment-input-rice" ' +
+                paymentColumn = '<input type="number" class="form-control form-control-sm payment-input-rice" ' +
                     'data-loan-id="' + client.loan_id + '" ' +
                     'data-type="rice" ' +
                     'value="0" step="0.01" min="0">';

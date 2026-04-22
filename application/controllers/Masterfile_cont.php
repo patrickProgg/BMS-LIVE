@@ -76,6 +76,8 @@ class Masterfile_cont extends CI_Controller
                 b.trans_date,
                 b.trans_type,
                 b.qty,
+                b.capital,
+                b.price_per_kg,
                 a.fish_type
             FROM tbl_fish_stock b
             JOIN tbl_fish a ON b.fish_id = a.id
@@ -183,6 +185,8 @@ class Masterfile_cont extends CI_Controller
     {
         // Get posted data
         $item_id = $this->input->post('item_id');
+        $price_per_kg = $this->input->post('price_per_kg');
+        $capital = $this->input->post('capital');
         $added_qty = floatval($this->input->post('added_qty'));
 
         // Validate input
@@ -223,6 +227,8 @@ class Masterfile_cont extends CI_Controller
         $this->db->insert('tbl_fish_stock', [
             'fish_id' => $item_id,
             'qty' => $added_qty_grams,
+            'capital' => $capital,
+            'price_per_kg' => $price_per_kg,
             'trans_type' => 'in',
             'trans_date' => date('Y-m-d H:i:s')
         ]);
@@ -370,6 +376,8 @@ class Masterfile_cont extends CI_Controller
             b.trans_date,
             b.trans_type,
             b.qty,
+            b.capital,
+            b.price_per_kg,
             a.sack_type as sack_size,
             (b.qty * CASE WHEN a.sack_type = '25kg' THEN 25 ELSE 50 END) as total_kg
         FROM tbl_rice_stock b
@@ -466,6 +474,8 @@ class Masterfile_cont extends CI_Controller
         $rice_type = $this->input->post('rice_type');
         $sack_type = $this->input->post('sack_type');
         $quantity = $this->input->post('quantity');
+        $price_per_kg = $this->input->post('price_per_kg');
+        $capital = $this->input->post('capital');
         $trans_date = $this->input->post('trans_date');
 
         // Validate inputs
@@ -495,11 +505,19 @@ class Masterfile_cont extends CI_Controller
         $sack_size = $sack_type == '25kg' ? 25 : 50;
         $total_kg = $quantity * $sack_size;
 
+        // Calculate capital correctly for this sack type
+        $calculated_capital = $total_kg * $price_per_kg;
+
+        // Use the calculated capital
+        $capital = $calculated_capital;
+
         // Insert into tbl_rice_stock
         $data = [
             'rice_id' => $rice->id,
             'trans_type' => 'in',
             'qty' => $quantity,
+            'capital' => $capital,
+            'price_per_kg' => $price_per_kg,
             'trans_date' => $trans_date
         ];
 
