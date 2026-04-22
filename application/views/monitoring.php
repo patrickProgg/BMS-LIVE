@@ -3011,7 +3011,7 @@
                     },
                     success: function (res) {
                         if (res.status === 'success') {
-
+                            Swal.close();
                             Swal.fire({
                                 title: 'Success!',
                                 text: response.message,
