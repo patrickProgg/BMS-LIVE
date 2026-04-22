@@ -1553,6 +1553,16 @@
 
                 function onFishSelected(id, dateRange, startDate, dueDate, status, total_amt, balance, date_completed) {
 
+                    Swal.fire({
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        background: 'transparent',
+                        boxShadow: 'none',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     globalFishStartDate = startDate;
                     globalFishEndDate = dueDate;
 
@@ -1598,16 +1608,6 @@
                     $('#selected_fish_balance').val(balance);
 
                     let fishDetailsForDelete = [];
-
-                    Swal.fire({
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                        background: 'transparent',
-                        boxShadow: 'none',
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
 
                     $.ajax({
                         url: '<?php echo site_url('Monitoring_cont/get_fish_loan_details'); ?>',
@@ -1727,56 +1727,14 @@
 
                 function onRiceSelected(id, dateRange, startDate, dueDate, status, total_amt, balance, date_completed) {
 
-                    $('#deleteRice').click(function () {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "You won't be able to revert this!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '#3085d6',
-                            confirmButtonText: 'Yes, delete it!',
-                            cancelButtonText: 'Cancel'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    url: '<?php echo site_url('Monitoring_cont/delete_rice_loan_id'); ?>',
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    data: { loan_id: id },
-                                    success: function (response) {
-                                        console.log(response);
-
-                                        if (response.success) {
-                                            Swal.fire(
-                                                'Deleted!',
-                                                'The credit has been deleted.',
-                                                'success'
-                                            ).then(() => {
-                                                openViewModal(
-                                                    globalClientId,
-                                                    $('#header_name').text(),
-                                                    $('#header_address').text(),
-                                                    $('#header_acc_no').text(),
-                                                    null,
-                                                    null,
-                                                    null
-                                                );
-
-                                                getLoanStatuses();
-                                            });
-                                        }
-                                    },
-                                    error: function () {
-                                        Swal.fire(
-                                            'Error!',
-                                            'Failed to delete the loan. Please try again.',
-                                            'error'
-                                        );
-                                    }
-                                });
-                            }
-                        });
+                    Swal.fire({
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        background: 'transparent',
+                        boxShadow: 'none',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
                     });
 
                     globalRiceStartDate = startDate;
@@ -1882,6 +1840,58 @@
                             var errorRow = '<tr><td colspan="7" class="text-center text-danger">Error loading data</td></tr>';
                             $('.rice-transactions-body').append(errorRow);
                         }
+                    });
+
+                    $('#deleteRice').click(function () {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '<?php echo site_url('Monitoring_cont/delete_rice_loan_id'); ?>',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: { loan_id: id },
+                                    success: function (response) {
+                                        console.log(response);
+
+                                        if (response.success) {
+                                            Swal.fire(
+                                                'Deleted!',
+                                                'The credit has been deleted.',
+                                                'success'
+                                            ).then(() => {
+                                                openViewModal(
+                                                    globalClientId,
+                                                    $('#header_name').text(),
+                                                    $('#header_address').text(),
+                                                    $('#header_acc_no').text(),
+                                                    null,
+                                                    null,
+                                                    null
+                                                );
+
+                                                getLoanStatuses();
+                                            });
+                                        }
+                                    },
+                                    error: function () {
+                                        Swal.fire(
+                                            'Error!',
+                                            'Failed to delete the loan. Please try again.',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            }
+                        });
                     });
 
                 }
