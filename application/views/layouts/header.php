@@ -361,13 +361,13 @@
                     <span class="menu-label">Expenses</span>
                 </a>
             </li>
-            <li class="nav-item" style="flex-shrink: 1; min-width: 0;">
+            <!-- <li class="nav-item" style="flex-shrink: 1; min-width: 0;">
                 <a class="nav-link d-flex align-items-center gap-1 <?= ($this->uri->segment(1) == 'history') ? 'active-nav' : '' ?>"
                     href="<?= base_url(); ?>history">
                     <i class='bx bx-history'></i>
                     <span class="menu-label">History</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
 
         <ul class="navbar-nav ms-auto" style="margin-right:122px;">
