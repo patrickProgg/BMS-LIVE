@@ -3011,23 +3011,19 @@
                     },
                     success: function (res) {
                         if (res.status === 'success') {
-                            // Make input readonly
-                            input.prop('readonly', true);
-                            input.addClass('text-success');
 
-                            // Add a quick visual feedback (optional)
-                            input.css('transition', 'background-color 0.3s');
-                            input.css('background-color', '#d4edda');
-                            setTimeout(() => {
-                                input.css('background-color', '');
-                            }, 600);
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 800,
+                                showConfirmButton: false,
+                                timerProgressBar: true
+                            });
 
-                            // Refresh the view
                             refreshLoanViewAfterPayment(loan_id, paymentType);
-                            updateTotalPaidDisplay(paymentAmount, paymentType, loan_id, payment_for, status);
 
-                            // Show a quick toast notification instead (optional)
-                            // Or just do nothing
+                            updateTotalPaidDisplay(paymentAmount, paymentType, loan_id, payment_for, status);
                         } else {
                             Swal.fire('Error', res.message || 'Failed to save payment', 'error');
                         }
