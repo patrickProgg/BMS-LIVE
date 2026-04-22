@@ -3011,22 +3011,23 @@
                     },
                     success: function (res) {
                         if (res.status === 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Payment Saved',
-                                text: 'Payment has been recorded successfully',
-                                confirmButtonColor: '#3085d6'
-                            }).then(() => {
-                                // Make input readonly
-                                input.prop('readonly', true);
-                                input.addClass('text-success');
+                            // Make input readonly
+                            input.prop('readonly', true);
+                            input.addClass('text-success');
 
-                                // Refresh the view
-                                refreshLoanViewAfterPayment(loan_id, paymentType);
+                            // Add a quick visual feedback (optional)
+                            input.css('transition', 'background-color 0.3s');
+                            input.css('background-color', '#d4edda');
+                            setTimeout(() => {
+                                input.css('background-color', '');
+                            }, 600);
 
-                                updateTotalPaidDisplay(paymentAmount, paymentType, loan_id, payment_for, status);
+                            // Refresh the view
+                            refreshLoanViewAfterPayment(loan_id, paymentType);
+                            updateTotalPaidDisplay(paymentAmount, paymentType, loan_id, payment_for, status);
 
-                            });
+                            // Show a quick toast notification instead (optional)
+                            // Or just do nothing
                         } else {
                             Swal.fire('Error', res.message || 'Failed to save payment', 'error');
                         }
