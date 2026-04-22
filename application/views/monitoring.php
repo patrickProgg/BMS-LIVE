@@ -1527,10 +1527,7 @@
 
         Swal.fire({
             title: 'Loading...',
-            text: 'Please wait while we fetch your dashboard data',
             allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: false,
             didOpen: () => {
                 Swal.showLoading();
             }
@@ -1614,10 +1611,7 @@
 
                     Swal.fire({
                         title: 'Loading...',
-                        text: 'Please wait while we fetch your dashboard data',
                         allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        allowEnterKey: false,
                         didOpen: () => {
                             Swal.showLoading();
                         }
@@ -2030,10 +2024,7 @@
 
         Swal.fire({
             title: 'Loading...',
-            text: 'Please wait while we fetch your dashboard data',
             allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: false,
             didOpen: () => {
                 Swal.showLoading();
             }
