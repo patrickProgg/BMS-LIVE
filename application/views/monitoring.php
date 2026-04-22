@@ -2143,7 +2143,7 @@
             success: function (response) {
 
                 Swal.close();
-                
+
                 // Create a map of payment dates to amounts
                 let paymentMap = {};
                 let totalPaid = 0;
@@ -3131,6 +3131,16 @@
 
     function autoCompleteLoan(loan_id, type, payment_for, status) {
 
+        Swal.fire({
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            background: 'transparent',
+            boxShadow: 'none',
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         $.ajax({
             url: "<?php echo base_url('Monitoring_cont/auto_complete_payment'); ?>",
             type: "POST",
@@ -3173,6 +3183,8 @@
                     }
 
                     getLoanStatuses();
+
+                    Swal.close();
                 }
             }
         });
