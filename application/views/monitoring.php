@@ -3096,6 +3096,17 @@
     }
 
     function updateTotalPaidDisplay(amount, type, loan_id, payment_for, status) {
+
+        Swal.fire({
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            background: 'transparent',
+            boxShadow: 'none',
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         const isFish = type === 'fish';
         const totalPaidSelector = isFish ? '#fish_total_payment' : '#rice_total_payment';
         const balanceSelector = isFish ? '.fish-running-balance' : '.rice-running-balance';
@@ -3130,16 +3141,6 @@
     }
 
     function autoCompleteLoan(loan_id, type, payment_for, status) {
-
-        Swal.fire({
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            background: 'transparent',
-            boxShadow: 'none',
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
 
         $.ajax({
             url: "<?php echo base_url('Monitoring_cont/auto_complete_payment'); ?>",
