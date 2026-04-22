@@ -1609,13 +1609,13 @@
 
                     let fishDetailsForDelete = [];
 
-                    // Swal.fire({
-                    //     title: 'Loading...',
-                    //     allowOutsideClick: false,
-                    //     didOpen: () => {
-                    //         Swal.showLoading();
-                    //     }
-                    // });
+                    Swal.fire({
+                        title: 'Loading...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
                     $.ajax({
                         url: '<?php echo site_url('Monitoring_cont/get_fish_loan_details'); ?>',
@@ -1624,7 +1624,7 @@
                         data: { loan_id: id },
                         success: function (response) {
 
-                            // Swal.close();
+                            Swal.close();
 
                             $('.fish-transactions-body').empty();
 
