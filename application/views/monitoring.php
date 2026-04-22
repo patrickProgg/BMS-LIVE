@@ -2111,6 +2111,7 @@
                 }
 
                 // Swal.close();
+                getLoanStatuses();
 
                 document.getElementById('fishPaymentTableBody').innerHTML = tableBody;
 
@@ -2212,6 +2213,7 @@
                 document.getElementById('ricePaymentTableBody').innerHTML = tableBody;
 
                 // Swal.close();
+                getLoanStatuses();
 
                 // Execute the callback after DOM is updated
                 if (callback && typeof callback === 'function') {
