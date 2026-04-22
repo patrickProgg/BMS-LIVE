@@ -1611,15 +1611,15 @@
 
                     let fishDetailsForDelete = [];
 
-                    Swal.fire({
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                        background: 'transparent',
-                        boxShadow: 'none',
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+                    // Swal.fire({
+                    //     showConfirmButton: false,
+                    //     allowOutsideClick: false,
+                    //     background: 'transparent',
+                    //     boxShadow: 'none',
+                    //     didOpen: () => {
+                    //         Swal.showLoading();
+                    //     }
+                    // });
 
                     $.ajax({
                         url: '<?php echo site_url('Monitoring_cont/get_fish_loan_details'); ?>',
@@ -1628,7 +1628,7 @@
                         data: { loan_id: id },
                         success: function (response) {
 
-                            Swal.close();
+                            // Swal.close();
 
                             $('.fish-transactions-body').empty();
 
@@ -2026,15 +2026,15 @@
         let start = new Date(startDate);
         let end = new Date(dueDate);
 
-        Swal.fire({
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            background: 'transparent',
-            boxShadow: 'none',
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+        // Swal.fire({
+        //     showConfirmButton: false,
+        //     allowOutsideClick: false,
+        //     background: 'transparent',
+        //     boxShadow: 'none',
+        //     didOpen: () => {
+        //         Swal.showLoading();
+        //     }
+        // });
 
         $.ajax({
             url: '<?php echo site_url('Monitoring_cont/get_payment_history_fish'); ?>',
