@@ -2211,7 +2211,7 @@
 
                 document.getElementById('ricePaymentTableBody').innerHTML = tableBody;
 
-                Swal.close();
+                // Swal.close();
 
                 // Execute the callback after DOM is updated
                 if (callback && typeof callback === 'function') {
