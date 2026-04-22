@@ -1525,6 +1525,17 @@
 
         $('#viewLoaner').modal('show');
 
+        Swal.fire({
+            title: 'Loading...',
+            text: 'Please wait while we fetch your dashboard data',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         globalClientId = id;
 
         $('#header_id').val(id);
@@ -1538,6 +1549,8 @@
             dataType: "json",
             data: { client_id: id },
             success: function (response) {
+
+                Swal.close();
 
                 let ongoingFishCount = response.fish ? response.fish.filter(loan => loan.status === 'ongoing').length : 0;
                 let ongoingRiceCount = response.rice ? response.rice.filter(loan => loan.status === 'ongoing').length : 0;
@@ -1599,12 +1612,25 @@
 
                     let fishDetailsForDelete = [];
 
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'Please wait while we fetch your dashboard data',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     $.ajax({
                         url: '<?php echo site_url('Monitoring_cont/get_fish_loan_details'); ?>',
                         type: 'POST',
                         dataType: 'json',
                         data: { loan_id: id },
                         success: function (response) {
+
+                            Swal.close();
 
                             $('.fish-transactions-body').empty();
 
@@ -2002,12 +2028,26 @@
         let start = new Date(startDate);
         let end = new Date(dueDate);
 
+        Swal.fire({
+            title: 'Loading...',
+            text: 'Please wait while we fetch your dashboard data',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         $.ajax({
             url: '<?php echo site_url('Monitoring_cont/get_payment_history_fish'); ?>',
             type: 'POST',
             dataType: 'json',
             data: { loan_id: id },
             success: function (response) {
+
+                Swal.close();
+
                 let paymentMap = {};
                 let totalPaid = 0;
 
