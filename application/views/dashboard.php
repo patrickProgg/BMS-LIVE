@@ -405,12 +405,30 @@
     }
 </style>
 
-<?php if (!empty($show_greeting)): ?>
-    <div id="greeting-toast" class="alert alert-primary" style="transition: opacity 1s;">
-        <h4>
-            <?= $greeting ?>
+<?php
+$welcome_message = $this->session->flashdata('welcome_toast');
+if (!empty($welcome_message)):
+    ?>
+    <div id="greeting-toast" class="alert alert-primary alert-dismissible fade show" role="alert"
+        style="transition: opacity 1s;">
+        <h4 class="mb-0">
+            <?= $welcome_message ?>
         </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+
+    <script>
+        // Auto hide after 3 seconds
+        setTimeout(function () {
+            var toast = document.getElementById('greeting-toast');
+            if (toast) {
+                toast.style.opacity = '0';
+                setTimeout(function () {
+                    toast.remove();
+                }, 1000);
+            }
+        }, 3000);
+    </script>
 <?php endif; ?>
 
 <div class="dashboard-container">
