@@ -1827,6 +1827,16 @@
                     $('#selected_rice_total').val(total_amt);
                     $('#selected_rice_balance').val(balance);
 
+                    Swal.fire({
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        background: 'transparent',
+                        boxShadow: 'none',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     $.ajax({
                         url: '<?php echo site_url('Monitoring_cont/get_rice_loan_details'); ?>',
                         type: 'POST',
@@ -2131,6 +2141,9 @@
             dataType: 'json',
             data: { loan_id: id },
             success: function (response) {
+
+                Swal.close();
+                
                 // Create a map of payment dates to amounts
                 let paymentMap = {};
                 let totalPaid = 0;
