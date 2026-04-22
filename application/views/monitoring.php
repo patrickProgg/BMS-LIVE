@@ -1525,16 +1525,6 @@
 
         $('#viewLoaner').modal('show');
 
-        Swal.fire({
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            background: 'transparent',
-            boxShadow: 'none',
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
         globalClientId = id;
 
         $('#header_id').val(id);
@@ -1611,15 +1601,15 @@
 
                     let fishDetailsForDelete = [];
 
-                    // Swal.fire({
-                    //     showConfirmButton: false,
-                    //     allowOutsideClick: false,
-                    //     background: 'transparent',
-                    //     boxShadow: 'none',
-                    //     didOpen: () => {
-                    //         Swal.showLoading();
-                    //     }
-                    // });
+                    Swal.fire({
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        background: 'transparent',
+                        boxShadow: 'none',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
                     $.ajax({
                         url: '<?php echo site_url('Monitoring_cont/get_fish_loan_details'); ?>',
