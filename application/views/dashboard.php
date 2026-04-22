@@ -405,6 +405,14 @@
     }
 </style>
 
+<?php if (!empty($show_greeting)): ?>
+    <div id="greeting-toast" class="alert alert-primary" style="transition: opacity 1s;">
+        <h4>
+            <?= $greeting ?>
+        </h4>
+    </div>
+<?php endif; ?>
+
 <div class="dashboard-container">
     <div class="container-fluid px-4">
 
