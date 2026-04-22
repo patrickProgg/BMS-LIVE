@@ -3126,12 +3126,30 @@
 
         // Call the appropriate function with callback
         if (isFish) {
+            Swal.fire({
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                background: 'transparent',
+                boxShadow: 'none',
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
             // if (globalFishStartDate && globalFishEndDate) {
             getPaymentHistoryFish(loan_id, globalFishStartDate, globalFishEndDate, processUpdate);
             // } else {
             //     getFishLoanDetails(loan_id, processUpdate);
             // }
         } else {
+            Swal.fire({
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                background: 'transparent',
+                boxShadow: 'none',
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
             // if (globalRiceStartDate && globalRiceEndDate) {
             getPaymentHistoryRice(loan_id, globalRiceStartDate, globalRiceEndDate, processUpdate);
             // } else {
@@ -3236,6 +3254,7 @@
                 } else {
                     $('#addNewLoanRice').show();
                 }
+
                 Swal.close();
             }
         });
