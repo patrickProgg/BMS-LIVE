@@ -1539,8 +1539,6 @@
             data: { client_id: id },
             success: function (response) {
 
-                // Swal.close();
-
                 let ongoingFishCount = response.fish ? response.fish.filter(loan => loan.status === 'ongoing').length : 0;
                 let ongoingRiceCount = response.rice ? response.rice.filter(loan => loan.status === 'ongoing').length : 0;
 
@@ -1617,8 +1615,6 @@
                         dataType: 'json',
                         data: { loan_id: id },
                         success: function (response) {
-
-                            // Swal.close();
 
                             $('.fish-transactions-body').empty();
 
@@ -2026,24 +2022,12 @@
         let start = new Date(startDate);
         let end = new Date(dueDate);
 
-        // Swal.fire({
-        //     showConfirmButton: false,
-        //     allowOutsideClick: false,
-        //     background: 'transparent',
-        //     boxShadow: 'none',
-        //     didOpen: () => {
-        //         Swal.showLoading();
-        //     }
-        // });
-
         $.ajax({
             url: '<?php echo site_url('Monitoring_cont/get_payment_history_fish'); ?>',
             type: 'POST',
             dataType: 'json',
             data: { loan_id: id },
             success: function (response) {
-
-                Swal.close();
 
                 let paymentMap = {};
                 let totalPaid = 0;
@@ -2121,6 +2105,8 @@
                 if (callback && typeof callback === 'function') {
                     callback();
                 }
+
+                Swal.close();
             },
             error: function (xhr, status, error) {
                 console.error("Error loading payment history: " + error);
@@ -2141,8 +2127,6 @@
             dataType: 'json',
             data: { loan_id: id },
             success: function (response) {
-
-                Swal.close();
 
                 // Create a map of payment dates to amounts
                 let paymentMap = {};
@@ -2221,6 +2205,8 @@
                 if (callback && typeof callback === 'function') {
                     callback();
                 }
+
+                Swal.close();
             },
             error: function (xhr, status, error) {
                 console.error("Error loading payment history: " + error);
