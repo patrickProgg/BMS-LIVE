@@ -2110,13 +2110,13 @@
                     current.setDate(current.getDate() + 1);
                 }
 
+                Swal.close();
+
                 document.getElementById('fishPaymentTableBody').innerHTML = tableBody;
 
                 if (callback && typeof callback === 'function') {
                     callback();
                 }
-
-                Swal.close();
             },
             error: function (xhr, status, error) {
                 console.error("Error loading payment history: " + error);
@@ -2211,12 +2211,12 @@
 
                 document.getElementById('ricePaymentTableBody').innerHTML = tableBody;
 
+                Swal.close();
+
                 // Execute the callback after DOM is updated
                 if (callback && typeof callback === 'function') {
                     callback();
                 }
-
-                Swal.close();
             },
             error: function (xhr, status, error) {
                 console.error("Error loading payment history: " + error);
