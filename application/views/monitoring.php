@@ -1525,13 +1525,13 @@
 
         $('#viewLoaner').modal('show');
 
-        // Swal.fire({
-        //     title: 'Loading...',
-        //     allowOutsideClick: false,
-        //     didOpen: () => {
-        //         Swal.showLoading();
-        //     }
-        // });
+        Swal.fire({
+            title: 'Loading...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         globalClientId = id;
 
@@ -2022,13 +2022,13 @@
         let start = new Date(startDate);
         let end = new Date(dueDate);
 
-        Swal.fire({
-            title: 'Loading...',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+        // Swal.fire({
+        //     title: 'Loading...',
+        //     allowOutsideClick: false,
+        //     didOpen: () => {
+        //         Swal.showLoading();
+        //     }
+        // });
 
         $.ajax({
             url: '<?php echo site_url('Monitoring_cont/get_payment_history_fish'); ?>',
