@@ -2110,7 +2110,7 @@
                     current.setDate(current.getDate() + 1);
                 }
 
-                Swal.close();
+                // Swal.close();
 
                 document.getElementById('fishPaymentTableBody').innerHTML = tableBody;
 
