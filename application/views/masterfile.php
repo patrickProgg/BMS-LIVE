@@ -834,6 +834,7 @@
         var total_in = Number(data.total_in) || 0;
         var total_out = Number(data.total_out) || 0;
         var current_stock = Number(data.rem_qty) || 0;
+        var total_capital = Number(data.total_capital) || 0;
         var safeId = data.id.toString().replace(/\s/g, '');
 
         return `
@@ -860,6 +861,12 @@
                         <div class="alert alert-success">
                             <small>Current Stock</small>
                             <h5>${current_stock} kgs</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alert alert-primary">
+                            <small>Total Capital</small>
+                            <h5>${total_capital} kgs</h5>
                         </div>
                     </div>
                 </div>
@@ -2199,6 +2206,7 @@
         var total_out_50kg = parseInt(data.total_out_50kg) || 0;
         var sacks_25kg = parseInt(data.sacks_25kg) || 0;
         var sacks_50kg = parseInt(data.sacks_50kg) || 0;
+        var total_capital = Number(data.total_capital) || 0;
 
         // Calculate total sacks in/out (now it will add, not concatenate)
         var totalSacksIn = total_in_25kg + total_in_50kg;
@@ -2252,6 +2260,12 @@
                                 <small class="text-muted">✅ 25kg: ${data.sacks_25kg || 0} sacks (${(data.sacks_25kg || 0) * 25} KG)</small><br>
                                 <small class="text-muted">✅ 50kg: ${data.sacks_50kg || 0} sacks (${(data.sacks_50kg || 0) * 50} KG)</small>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alert alert-primary">
+                            <small>Total Capital</small>
+                            <h5>${total_capital} kgs</h5>
                         </div>
                     </div>
                 </div>

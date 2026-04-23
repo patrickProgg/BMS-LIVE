@@ -20,7 +20,8 @@ class Masterfile_cont extends CI_Controller
            ROUND(COALESCE(SUM(CASE WHEN b.trans_type = "out" THEN b.qty ELSE 0 END), 0) / 1000, 3) as total_out,
            ROUND(COALESCE(SUM(CASE WHEN b.trans_type = "remove" THEN b.qty ELSE 0 END), 0) / 1000, 3) as total_remove,
            ROUND(COALESCE(SUM(CASE WHEN b.trans_type = "in" THEN b.qty ELSE 0 END), 0) / 1000, 3) as total_qty,
-           ROUND((COALESCE(SUM(CASE WHEN b.trans_type = "in" THEN b.qty ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN b.trans_type = "out" THEN b.qty ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN b.trans_type = "remove" THEN b.qty ELSE 0 END), 0)) / 1000, 3) as rem_qty
+           ROUND((COALESCE(SUM(CASE WHEN b.trans_type = "in" THEN b.qty ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN b.trans_type = "out" THEN b.qty ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN b.trans_type = "remove" THEN b.qty ELSE 0 END), 0)) / 1000, 3) as rem_qty,
+           COALESCE(SUM(CASE WHEN b.trans_type = "in" THEN b.capital ELSE 0 END), 0) as total_capital
         ');
 
         $this->db->from('tbl_fish as a');
@@ -272,7 +273,8 @@ class Masterfile_cont extends CI_Controller
             a.date_added,
             COALESCE(SUM(CASE WHEN b.trans_type = "in" THEN b.qty ELSE 0 END), 0) as total_in,
             COALESCE(SUM(CASE WHEN b.trans_type = "out" THEN b.qty ELSE 0 END), 0) as total_out,
-            COALESCE(SUM(CASE WHEN b.trans_type = "remove" THEN b.qty ELSE 0 END), 0) as total_remove
+            COALESCE(SUM(CASE WHEN b.trans_type = "remove" THEN b.qty ELSE 0 END), 0) as total_remove,
+            COALESCE(SUM(CASE WHEN b.trans_type = "in" THEN b.capital ELSE 0 END), 0) as total_capital
         ');
 
         $this->db->from('tbl_rice as a');
