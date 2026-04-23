@@ -2271,7 +2271,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="alert alert-primary h-100">
+                        <div class="alert alert-primary">
                             <small>Total Capital</small>
                             <h5>₱ ${formatted_capital}</h5>
                             <small></small>
