@@ -2229,7 +2229,7 @@
             </div>
             <div class="card-body">
                 <div class="row mb-1">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-info">
                             <small>Total Stock In (All Time)</small>
                             <h5>${totalSacksIn} sacks</h5>
@@ -2240,7 +2240,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-warning">
                             <small>Total Stock Out (All Time)</small>
                             <h5>${totalSacksOut} sacks</h5>
@@ -2251,7 +2251,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-success">
                             <small>Current Stock</small>
                             <h5>${currentSacks} sacks</h5>
@@ -2262,7 +2262,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-primary">
                             <small>Total Capital</small>
                             <h5>${total_capital} kgs</h5>
