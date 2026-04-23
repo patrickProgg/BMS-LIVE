@@ -2274,9 +2274,10 @@
                         <div class="alert alert-primary h-100">
                             <small>Total Capital</small>
                             <h5>₱ ${formatted_capital}</h5>
-                            <br><br>
+                            <small></small>
                             <div class="mt-1">
-                                <br>
+                                <small></small><br>
+                                <small></small>
                             </div>
                         </div>
                     </div>
