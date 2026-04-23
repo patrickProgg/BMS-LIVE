@@ -303,7 +303,7 @@ class Masterfile_cont extends CI_Controller
             COALESCE(SUM(CASE WHEN sack_type = "50kg" THEN total_out ELSE 0 END), 0) as total_out_50kg,
             COALESCE(SUM(CASE WHEN sack_type = "25kg" THEN total_remove ELSE 0 END), 0) as total_remove_25kg,
             COALESCE(SUM(CASE WHEN sack_type = "50kg" THEN total_remove ELSE 0 END), 0) as total_remove_50kg,
-            COALESCE(SUM(CASE WHEN b.trans_type = "in" THEN b.capital ELSE 0 END), 0) as total_capital
+            COALESCE(SUM(CASE WHEN trans_type = "in" THEN capital ELSE 0 END), 0) as total_capital
         ');
 
         $this->db->from("($subquery) as sub");
