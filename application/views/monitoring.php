@@ -3199,6 +3199,16 @@
                         $('.rice-status').text(statusUpper);
                     }
 
+                    Swal.fire({
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        background: 'transparent',
+                        boxShadow: 'none',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     getLoanStatuses();
                 }
             }
