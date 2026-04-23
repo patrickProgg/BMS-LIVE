@@ -558,7 +558,7 @@
                                                     <i class="fas fa-history me-2 text-primary"></i>Loan History - Rice
                                                 </h5>
                                                 <button
-                                                    class="btn btn-sm btn-danger d-inline-block ms-2 delete-loan-btn"
+                                                    class="btn btn-sm btn-danger d-inline-block ms-2 delete-loan-btn display-none"
                                                     data-type="rice" id="deleteRice">
                                                     <i class="fas fa-trash me-1"></i> Delete
                                                 </button>
