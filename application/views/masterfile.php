@@ -2274,10 +2274,10 @@
                         <div class="alert alert-primary">
                             <small>Total Capital</small>
                             <h5>₱ ${formatted_capital}</h5>
-                            <small></small>
+                            <small>&nbsp;</small>
                             <div class="mt-1">
-                                <small></small><br>
-                                <small></small>
+                                <small>&nbsp;</small><br>
+                                <small>&nbsp;</small>
                             </div>
                         </div>
                     </div>
