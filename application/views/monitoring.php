@@ -465,13 +465,6 @@
                                                         style="max-height: 200px; overflow-y: auto; z-index: 9999;">
                                                     </ul>
                                                 </div>
-                                                <!-- <button class="btn btn-sm btn-success edit-loan-btn" data-type="fish">
-                                                    <i class="fas fa-edit me-1"></i> Edit
-                                                </button>
-                                                <button class="btn btn-sm btn-danger cancel-edit-btn" data-type="fish"
-                                                    style="display: none;">
-                                                    <i class="fas fa-times me-1"></i> Cancel
-                                                </button> -->
                                             </div>
                                         </div>
 
@@ -558,7 +551,7 @@
                                                     <i class="fas fa-history me-2 text-primary"></i>Loan History - Rice
                                                 </h5>
                                                 <button
-                                                    class="btn btn-sm btn-danger d-inline-block ms-2 delete-loan-btn display-none"
+                                                    class="btn btn-sm btn-danger d-inline-block ms-2 delete-loan-btn"
                                                     data-type="rice" id="deleteRice">
                                                     <i class="fas fa-trash me-1"></i> Delete
                                                 </button>
@@ -574,13 +567,6 @@
                                                         style="max-height: 200px; overflow-y: auto; z-index: 9999;">
                                                     </ul>
                                                 </div>
-                                                <!-- <button class="btn btn-sm btn-success edit-loan-btn" data-type="rice">
-                                                    <i class="fas fa-edit me-1"></i> Edit
-                                                </button>
-                                                <button class="btn btn-sm btn-danger cancel-edit-btn" data-type="rice"
-                                                    style="display: none;">
-                                                    <i class="fas fa-times me-1"></i> Cancel
-                                                </button> -->
                                             </div>
                                         </div>
 
@@ -1201,6 +1187,17 @@
 <script>
 
     let globalClientId = 0;
+    var fishDatabase = {};
+    var riceDatabase = {};
+    let globalFishStartDate = "";
+    let globalFishEndDate = "";
+    let globalRiceStartDate = "";
+    let globalRiceEndDate = "";
+
+    let bulkPaymentData = {
+        selected_date: null,
+        payments: []
+    };
 
     const viewLoanerEl = document.getElementById('viewLoaner');
     const addNewModalElFish = document.getElementById('addLoanSameClientFish');
@@ -2230,9 +2227,6 @@
         });
     }
 
-    var fishDatabase = {};
-    var riceDatabase = {};
-
     function openAddNewLoanModalFish() {
         $.ajax({
             url: '<?php echo site_url('Monitoring_cont/get_fish_types'); ?>',
@@ -3057,11 +3051,6 @@
         }
     }
 
-    let globalFishStartDate = "";
-    let globalFishEndDate = "";
-    let globalRiceStartDate = "";
-    let globalRiceEndDate = "";
-
     // Example functions to refresh loan details
     function getFishLoanDetails(loan_id) {
         $.ajax({
@@ -3268,10 +3257,7 @@
         });
     }
 
-    let bulkPaymentData = {
-        selected_date: null,
-        payments: []
-    };
+
 
     $(document).on('click', '#bulk_payment', function () {
         const date = $('#selected_date').val();
@@ -3903,4 +3889,83 @@
     $('#addVarianceModal').on('hidden.bs.modal', function () {
         resetVarianceForm();
     });
+
+    $('#viewLoaner').on('hidden.bs.modal', function () {
+        resetViewLoanerModal();
+    });
+
+    function resetViewLoanerModal() {
+        // Reset global variables
+        globalClientId = 0;
+        fishDatabase = {};
+        riceDatabase = {};
+        globalFishStartDate = "";
+        globalFishEndDate = "";
+        globalRiceStartDate = "";
+        globalRiceEndDate = "";
+
+        bulkPaymentData = {
+            selected_date: null,
+            payments: []
+        };
+
+        // Reset hidden inputs
+        $('#header_id').val('');
+        $('#header_loan_id').val('');
+        $('#current_loan_type').val('fish');
+        $('#selected_date_id').val('');
+
+        // Reset client info
+        $('#header_acc_no').text('');
+        $('#header_name').text('');
+        $('#header_address').text('');
+
+        // Reset fish tab info
+        $('.fish-start-date').text('');
+        $('.fish-due-date').text('');
+        $('.fish-total-amt').text('0.00');
+        $('.fish-running-balance').text('0.00');
+        $('.fish-status').text('');
+        $('.fish-date-completed').text('');
+
+        // Reset rice tab info
+        $('.rice-start-date').text('');
+        $('.rice-due-date').text('');
+        $('.rice-total-amt').text('0.00');
+        $('.rice-running-balance').text('0.00');
+        $('.rice-status').text('');
+        $('.rice-date-completed').text('');
+
+        // Clear transaction tables
+        $('.fish-transactions-body').empty();
+        $('.rice-transactions-body').empty();
+
+        // Clear payment tables
+        $('#fishPaymentTableBody').empty();
+        $('#ricePaymentTableBody').empty();
+
+        // Reset total payment displays
+        $('#fish_total_payment').text('0.00');
+        $('#rice_total_payment').text('0.00');
+
+        // Reset dropdown buttons
+        $('.fish-btn').html('Select Date Range');
+        $('.rice-btn').html('Select Date Range');
+
+        // Clear dropdown menus
+        $('.fish-dropdown').empty();
+        $('.rice-dropdown').empty();
+
+        // Hide delete button if exists
+        $('#deleteLoanDetails').addClass('d-none');
+
+        // Reset active tab to fish
+        $('#current_loan_type').val('fish');
+        $('#view-fish-tab').show();
+        $('#view-rice-tab').hide();
+
+        // Reset tab active states
+        $('.tab-link').removeClass('active');
+        $('.tab-link[data-tab="view-fish"]').addClass('active');
+    }
 </script>
