@@ -1244,6 +1244,10 @@
 
     $(document).ready(function () {
 
+        $('#viewLoaner').on('hidden.bs.modal', function () {
+            resetViewLoanerModal();
+        });
+
         $('.tab-link').click(function () {
             let tab = $(this).data('tab');
 
@@ -3890,9 +3894,6 @@
         resetVarianceForm();
     });
 
-    $('#viewLoaner').on('hidden.bs.modal', function () {
-        resetViewLoanerModal();
-    });
 
     function resetViewLoanerModal() {
         // Reset global variables
