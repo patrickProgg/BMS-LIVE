@@ -2110,8 +2110,8 @@
                     current.setDate(current.getDate() + 1);
                 }
 
-                // Swal.close();
-                getLoanStatuses();
+                Swal.close();
+                // getLoanStatuses();
 
                 document.getElementById('fishPaymentTableBody').innerHTML = tableBody;
 
@@ -2212,8 +2212,8 @@
 
                 document.getElementById('ricePaymentTableBody').innerHTML = tableBody;
 
-                // Swal.close();
-                getLoanStatuses();
+                Swal.close();
+                // getLoanStatuses();
 
                 // Execute the callback after DOM is updated
                 if (callback && typeof callback === 'function') {
