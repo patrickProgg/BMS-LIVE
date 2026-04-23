@@ -303,7 +303,7 @@ class Masterfile_cont extends CI_Controller
             COALESCE(SUM(CASE WHEN sack_type = "50kg" THEN total_out ELSE 0 END), 0) as total_out_50kg,
             COALESCE(SUM(CASE WHEN sack_type = "25kg" THEN total_remove ELSE 0 END), 0) as total_remove_25kg,
             COALESCE(SUM(CASE WHEN sack_type = "50kg" THEN total_remove ELSE 0 END), 0) as total_remove_50kg,
-            COALESCE(SUM(CASE WHEN trans_type = "in" THEN capital ELSE 0 END), 0) as total_capital
+            COALESCE(SUM(total_capital), 0) as total_capital
         ');
 
         $this->db->from("($subquery) as sub");
@@ -318,6 +318,7 @@ class Masterfile_cont extends CI_Controller
         $total_sacks_25kg = 0;
         $total_sacks_50kg = 0;
         $low_stock_count = 0;
+        $total_capital = 0;
 
         // Calculate KG for each row and summary totals
         foreach ($data as &$row) {
@@ -364,7 +365,8 @@ class Masterfile_cont extends CI_Controller
                 "total_sacks_50kg" => $total_sacks_50kg,
                 "total_kg_25kg" => $total_sacks_25kg * 25,
                 "total_kg_50kg" => $total_sacks_50kg * 50,
-                "low_stock_count" => $low_stock_count
+                "low_stock_count" => $low_stock_count,
+                "total_capital" => $total_capital
             ]
         ]);
     }
