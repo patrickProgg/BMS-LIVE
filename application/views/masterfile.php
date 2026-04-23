@@ -835,6 +835,10 @@
         var total_out = Number(data.total_out) || 0;
         var current_stock = Number(data.rem_qty) || 0;
         var total_capital = Number(data.total_capital) || 0;
+        var formatted_capital = total_capital.toLocaleString('en-PH', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
         var safeId = data.id.toString().replace(/\s/g, '');
 
         return `
@@ -845,28 +849,28 @@
             <div class="card-body">
             
                 <div class="row mb-1">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-info">
                             <small>Total Stock In (All Time)</small>
                             <h5>${total_in} kgs</h5>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-warning">
                             <small>Total Stock Out (All Time)</small>
                             <h5>${total_out} kgs</h5>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-success">
                             <small>Current Stock</small>
                             <h5>${current_stock} kgs</h5>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="alert alert-primary">
                             <small>Total Capital</small>
-                            <h5>${total_capital} kgs</h5>
+                            <h5>${formatted_capital} kgs</h5>
                         </div>
                     </div>
                 </div>
@@ -2207,6 +2211,10 @@
         var sacks_25kg = parseInt(data.sacks_25kg) || 0;
         var sacks_50kg = parseInt(data.sacks_50kg) || 0;
         var total_capital = Number(data.total_capital) || 0;
+        var formatted_capital = total_capital.toLocaleString('en-PH', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
 
         // Calculate total sacks in/out (now it will add, not concatenate)
         var totalSacksIn = total_in_25kg + total_in_50kg;
@@ -2265,7 +2273,7 @@
                     <div class="col-md-3">
                         <div class="alert alert-primary">
                             <small>Total Capital</small>
-                            <h5>${total_capital} kgs</h5>
+                            <h5>${formatted_capital} kgs</h5>
                         </div>
                     </div>
                 </div>
