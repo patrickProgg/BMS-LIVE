@@ -1558,7 +1558,9 @@
                         showConfirmButton: false,
                         allowOutsideClick: false,
                         background: 'transparent',
-                        boxShadow: 'none',
+                        customClass: {
+                            popup: 'shadow-none'
+                        },
                         didOpen: () => {
                             Swal.showLoading();
                         }
@@ -1732,7 +1734,9 @@
                         showConfirmButton: false,
                         allowOutsideClick: false,
                         background: 'transparent',
-                        boxShadow: 'none',
+                        customClass: {
+                            popup: 'shadow-none'
+                        },
                         didOpen: () => {
                             Swal.showLoading();
                         }
@@ -1786,7 +1790,9 @@
                         showConfirmButton: false,
                         allowOutsideClick: false,
                         background: 'transparent',
-                        boxShadow: 'none',
+                        customClass: {
+                            popup: 'shadow-none'
+                        },
                         didOpen: () => {
                             Swal.showLoading();
                         }
@@ -3092,7 +3098,9 @@
             showConfirmButton: false,
             allowOutsideClick: false,
             background: 'transparent',
-            boxShadow: 'none',
+            customClass: {
+                popup: 'shadow-none'
+            },
             didOpen: () => {
                 Swal.showLoading();
             }
@@ -3121,7 +3129,9 @@
                 showConfirmButton: false,
                 allowOutsideClick: false,
                 background: 'transparent',
-                boxShadow: 'none',
+                customClass: {
+                    popup: 'shadow-none'
+                },
                 didOpen: () => {
                     Swal.showLoading();
                 }
@@ -3136,7 +3146,9 @@
                 showConfirmButton: false,
                 allowOutsideClick: false,
                 background: 'transparent',
-                boxShadow: 'none',
+                customClass: {
+                    popup: 'shadow-none'
+                },
                 didOpen: () => {
                     Swal.showLoading();
                 }
@@ -3196,7 +3208,9 @@
                         showConfirmButton: false,
                         allowOutsideClick: false,
                         background: 'transparent',
-                        boxShadow: 'none',
+                        customClass: {
+                            popup: 'shadow-none'
+                        },
                         didOpen: () => {
                             Swal.showLoading();
                         }
