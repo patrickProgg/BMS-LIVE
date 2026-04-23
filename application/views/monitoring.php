@@ -2975,6 +2975,14 @@
                 confirmButtonText: 'Confirm Payment',
                 cancelButtonText: 'Cancel',
                 confirmButtonColor: '#3085d6',
+                didOpen: () => {
+                    document.addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            Swal.clickConfirm();
+                        }
+                    }, { once: true });
+                },
                 preConfirm: () => {
                     const selectedDate = document.getElementById('swal_payment_date').value;
                     if (!selectedDate) {
