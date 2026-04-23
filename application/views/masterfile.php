@@ -870,7 +870,7 @@
                     <div class="col-md-3">
                         <div class="alert alert-primary">
                             <small>Total Capital</small>
-                            <h5>${formatted_capital} kgs</h5>
+                            <h5>₱ ${formatted_capital}</h5>
                         </div>
                     </div>
                 </div>
@@ -2273,7 +2273,7 @@
                     <div class="col-md-3">
                         <div class="alert alert-primary">
                             <small>Total Capital</small>
-                            <h5>${formatted_capital} kgs</h5>
+                            <h5>₱ ${formatted_capital}</h5>
                         </div>
                     </div>
                 </div>
