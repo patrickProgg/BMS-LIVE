@@ -2019,7 +2019,7 @@
                 Swal.fire('Error', 'Something went wrong.', 'error');
             }
         });
-        $('#viewLoaner').modal('show');
+        // $('#viewLoaner').modal('show');
     }
 
     function processDueDate(id, type, dueDate) {
@@ -2231,6 +2231,8 @@
                 }
             }
         });
+
+        $('#viewLoaner').modal('show');
     }
 
     function getPaymentHistoryRice(id, startDate, dueDate, callback) {
