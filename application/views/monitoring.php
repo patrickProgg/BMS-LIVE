@@ -2028,6 +2028,7 @@
 
         console.log('due');
         let creditType = type === 'fish' ? 'Dried Fish' : 'Rice';
+        let extensionDays = type === 'fish' ? 15 : 30;
 
         Swal.fire({
             title: creditType + ' Credit is Overdue!',
@@ -2035,7 +2036,7 @@
                 <div style="text-align: left;">
                     <p>Due Date: <span class="text-danger">${formatDate(dueDate)}</span></p>
                     <hr>
-                    <p>Would you like to extend the due date by 15 days?</p>
+                    <p>Would you like to extend the due date by ${extensionDays} days?</p>
                 </div>
             `,
             icon: 'warning',
