@@ -1554,17 +1554,17 @@
 
                 function onFishSelected(id, dateRange, startDate, dueDate, status, total_amt, balance, date_completed) {
 
-                    Swal.fire({
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                        background: 'transparent',
-                        customClass: {
-                            popup: 'shadow-none'
-                        },
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+                    // Swal.fire({
+                    //     showConfirmButton: false,
+                    //     allowOutsideClick: false,
+                    //     background: 'transparent',
+                    //     customClass: {
+                    //         popup: 'shadow-none'
+                    //     },
+                    //     didOpen: () => {
+                    //         Swal.showLoading();
+                    //     }
+                    // });
 
                     globalFishStartDate = startDate;
                     globalFishEndDate = dueDate;
@@ -1731,17 +1731,17 @@
 
                 function onRiceSelected(id, dateRange, startDate, dueDate, status, total_amt, balance, date_completed) {
 
-                    Swal.fire({
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                        background: 'transparent',
-                        customClass: {
-                            popup: 'shadow-none'
-                        },
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+                    // Swal.fire({
+                    //     showConfirmButton: false,
+                    //     allowOutsideClick: false,
+                    //     background: 'transparent',
+                    //     customClass: {
+                    //         popup: 'shadow-none'
+                    //     },
+                    //     didOpen: () => {
+                    //         Swal.showLoading();
+                    //     }
+                    // });
 
                     globalRiceStartDate = startDate;
                     globalRiceEndDate = dueDate;
@@ -3272,34 +3272,34 @@
 
         // Call the appropriate function with callback
         if (isFish) {
-            Swal.fire({
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                background: 'transparent',
-                customClass: {
-                    popup: 'shadow-none'
-                },
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+            // Swal.fire({
+            //     showConfirmButton: false,
+            //     allowOutsideClick: false,
+            //     background: 'transparent',
+            //     customClass: {
+            //         popup: 'shadow-none'
+            //     },
+            //     didOpen: () => {
+            //         Swal.showLoading();
+            //     }
+            // });
             // if (globalFishStartDate && globalFishEndDate) {
             getPaymentHistoryFish(loan_id, globalFishStartDate, globalFishEndDate, processUpdate);
             // } else {
             //     getFishLoanDetails(loan_id, processUpdate);
             // }
         } else {
-            Swal.fire({
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                background: 'transparent',
-                customClass: {
-                    popup: 'shadow-none'
-                },
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+            // Swal.fire({
+            //     showConfirmButton: false,
+            //     allowOutsideClick: false,
+            //     background: 'transparent',
+            //     customClass: {
+            //         popup: 'shadow-none'
+            //     },
+            //     didOpen: () => {
+            //         Swal.showLoading();
+            //     }
+            // });
             // if (globalRiceStartDate && globalRiceEndDate) {
             getPaymentHistoryRice(loan_id, globalRiceStartDate, globalRiceEndDate, processUpdate);
             // } else {
@@ -3351,17 +3351,17 @@
                         $('.rice-status').text(statusUpper);
                     }
 
-                    Swal.fire({
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                        background: 'transparent',
-                        customClass: {
-                            popup: 'shadow-none'
-                        },
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+                    // Swal.fire({
+                    //     showConfirmButton: false,
+                    //     allowOutsideClick: false,
+                    //     background: 'transparent',
+                    //     customClass: {
+                    //         popup: 'shadow-none'
+                    //     },
+                    //     didOpen: () => {
+                    //         Swal.showLoading();
+                    //     }
+                    // });
 
                     getLoanStatuses();
                 }
@@ -3416,7 +3416,7 @@
                     $('#addNewLoanRice').show();
                 }
 
-                Swal.close();
+                // Swal.close();
             }
         });
     }
