@@ -786,7 +786,7 @@
             </div>
         </div>
 
-        <div class="stats-grid">
+        <div class="stats-grid mb-0">
             <a href="<?= base_url(); ?>client" style="text-decoration: none; display: block;">
                 <div class="stat-card client-card">
                     <div class="card-header-row">
