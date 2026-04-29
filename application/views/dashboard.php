@@ -505,7 +505,7 @@
 </style>
 
 <div class="dashboard-container">
-    <div class="container-fluid mb-3">
+    <div class="container-fluid mb-1">
 
         <!-- FISH SECTION -->
         <div class="section-header">
