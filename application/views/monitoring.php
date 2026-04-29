@@ -3005,12 +3005,37 @@
             const fullname = $('#header_name').text();
             const address = $('#header_address').text();
 
-            const fish_due = $('.fish-due-date').text();
-            const formattedDateFish = new Date(fish_due).toISOString().split('T')[0];
+            const fish_due_text = $('.fish-due-date').text();
+            let formattedDateFish = '';
 
-            const rice_due = $('.rice-due-date').text();
-            const formattedDateRice = new Date(rice_due).toISOString().split('T')[0];
+            if (fish_due_text && fish_due_text.trim() !== '') {
+                const fish_due = new Date(fish_due_text);
+                if (!isNaN(fish_due.getTime())) {
+                    formattedDateFish = fish_due.toISOString().split('T')[0];
+                } else {
+                    console.log('Invalid fish due date:', fish_due_text);
+                    formattedDateFish = '';
+                }
+            } else {
+                console.log('Empty fish due date');
+            }
 
+            // RICE due date
+            const rice_due_text = $('.rice-due-date').text();
+            let formattedDateRice = '';
+
+            if (rice_due_text && rice_due_text.trim() !== '') {
+                const rice_due = new Date(rice_due_text);
+                if (!isNaN(rice_due.getTime())) {
+                    formattedDateRice = rice_due.toISOString().split('T')[0];
+                } else {
+                    console.log('Invalid rice due date:', rice_due_text);
+                    formattedDateRice = '';
+                }
+            } else {
+                console.log('Empty rice due date');
+            }
+            
             const fish_running_bal = $('.fish-running-balance').text();
             const rice_running_bal = $('.rice-running-balance').text();
 
