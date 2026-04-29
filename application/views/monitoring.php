@@ -3268,6 +3268,8 @@
             } else if (currentBalance > 0 && status === 'COMPLETED') {
                 autoCompleteLoan(loan_id, type, payment_for, "ongoing");
             }
+
+            Swal.close();
         }
 
         // Call the appropriate function with callback
