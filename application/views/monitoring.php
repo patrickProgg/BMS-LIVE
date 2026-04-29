@@ -1567,8 +1567,8 @@
                     globalFishStartDate = startDate;
                     globalFishEndDate = dueDate;
 
-                    // const date_now = new Date().toISOString().split('T')[0];
-                    const date_now = "2026-06-01";
+                    const date_now = new Date().toISOString().split('T')[0];
+                    // const date_now = "2026-06-01";
 
                     $('.fish-btn').html(dateRange);
 
@@ -1743,8 +1743,8 @@
 
                     globalRiceStartDate = startDate;
                     globalRiceEndDate = dueDate;
-                    // const date_now = new Date().toISOString().split('T')[0];
-                    const date_now = "2026-06-01";
+                    const date_now = new Date().toISOString().split('T')[0];
+                    // const date_now = "2026-06-01";
 
                     $('.rice-btn').html(dateRange);
 
