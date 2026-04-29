@@ -3241,17 +3241,17 @@
 
     function updateTotalPaidDisplay(amount, type, loan_id, payment_for, status) {
 
-        Swal.fire({
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            background: 'transparent',
-            customClass: {
-                popup: 'shadow-none'
-            },
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+        // Swal.fire({
+        //     showConfirmButton: false,
+        //     allowOutsideClick: false,
+        //     background: 'transparent',
+        //     customClass: {
+        //         popup: 'shadow-none'
+        //     },
+        //     didOpen: () => {
+        //         Swal.showLoading();
+        //     }
+        // });
 
         const isFish = type === 'fish';
         const totalPaidSelector = isFish ? '#fish_total_payment' : '#rice_total_payment';
@@ -3269,7 +3269,7 @@
                 autoCompleteLoan(loan_id, type, payment_for, "ongoing");
             }
 
-            Swal.close();
+            // Swal.close()
         }
 
         // Call the appropriate function with callback
