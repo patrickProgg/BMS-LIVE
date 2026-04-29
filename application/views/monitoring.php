@@ -1524,8 +1524,6 @@
 
     function openViewModal(id, fullname, address, acc_no, selectedLoanId = null, selectedType = null, visibleTab = null) {
 
-        $('#viewLoaner').modal('show');
-
         globalClientId = id;
 
         $('#header_id').val(id);
@@ -2021,7 +2019,7 @@
                 Swal.fire('Error', 'Something went wrong.', 'error');
             }
         });
-
+        $('#viewLoaner').modal('show');
     }
 
     function processDueDate(id, type, dueDate) {
