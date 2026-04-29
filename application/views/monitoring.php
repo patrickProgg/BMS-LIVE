@@ -2026,6 +2026,7 @@
 
     function processDueDate(id, type, dueDate) {
 
+        console.log('due');
         let creditType = type === 'fish' ? 'Dried Fish' : 'Rice';
 
         Swal.fire({
