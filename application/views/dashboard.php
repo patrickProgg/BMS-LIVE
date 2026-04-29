@@ -505,7 +505,7 @@
 </style>
 
 <div class="dashboard-container">
-    <div class="container-fluid px-4">
+    <div class="container-fluid mb-3">
 
         <!-- FISH SECTION -->
         <div class="section-header">
@@ -809,7 +809,6 @@
 </div>
 
 <div class="row mb-3">
-
     <div class="col-md-8 px-3">
         <div class="card h-100">
             <div class="card-header">
