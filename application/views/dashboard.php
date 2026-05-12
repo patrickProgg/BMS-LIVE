@@ -513,7 +513,7 @@
                 <i class='bx bx-fish' style="color: var(--primary-blue);"></i>
                 <span>Dried Fish Analytics</span>
             </div>
-            <div class="section-badge">
+            <div class="section-badge">5 
                 <i class='bx bx-stats'></i> Real-time metrics
             </div>
         </div>
