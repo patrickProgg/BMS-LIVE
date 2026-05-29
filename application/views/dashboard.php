@@ -514,7 +514,7 @@
                 <span>Dried Fish Analytics</span>
             </div>
             <div class="section-badge">
-                <i class='bx bx-stats'></i> Real-time metrics test tes ddfd
+                <i class='bx bx-stats'></i> Real-time metrics test tes 
             </div>
         </div>
 
