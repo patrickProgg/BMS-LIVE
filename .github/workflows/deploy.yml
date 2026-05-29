@@ -31,7 +31,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps  # CHANGE THIS - Use FTPS instead of FTP
           port: 21  # or 990 for implicit FTPS
-          server-dir: /www/
+          server-dir: /www/bms/
           exclude: |
             .git/**
             .github/**
