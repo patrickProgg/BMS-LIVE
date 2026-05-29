@@ -1,0 +1,46 @@
+name: FTP Deploy
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '.git/**'
+      - '.github/**'
+      - '**.md'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          
+      - name: Remove Git Files
+        run: |
+          rm -rf .git
+          rm -rf .github
+          rm -f .gitignore
+          rm -f .gitattributes
+          rm -f .editorconfig
+          
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps  # CHANGE THIS - Use FTPS instead of FTP
+          port: 21  # or 990 for implicit FTPS
+          server-dir: /www/bms/
+          exclude: |
+            .git/**
+            .github/**
+            .gitignore
+            .gitattributes
+            .env*
+            *.log
+            *.lock
+            *.json
+            application/cache/**
+            application/logs/**
+          # Remove delete-removed - not supported
