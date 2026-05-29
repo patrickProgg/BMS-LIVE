@@ -10,7 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Remove Git Files
+        run: |
+          rm -rf .git
+          rm -rf .github
+          rm -rf .vscode
+          rm -f .gitignore
+          rm -f .gitattributes
+          rm -f .editorconfig
 
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
@@ -19,9 +31,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
 
-          protocol: ftp
-          security: loose
+          protocol: ftps
           port: 21
+          security: loose
 
           server-dir: /www/bms/
 
@@ -31,7 +43,11 @@ jobs:
             **/.git*
             **/.github/**
             **/.vscode/**
+            .gitignore
+            .gitattributes
             .editorconfig
             .env*
+            *.log
+            *.lock
             application/cache/**
             application/logs/**
