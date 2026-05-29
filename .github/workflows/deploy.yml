@@ -1,23 +1,37 @@
-- name: FTP Deploy
-  uses: SamKirkland/FTP-Deploy-Action@v4.4.0
-  with:
-    server: ${{ secrets.FTP_SERVER }}
-    username: ${{ secrets.FTP_USERNAME }}
-    password: ${{ secrets.FTP_PASSWORD }}
+name: FTP Deploy
 
-    protocol: ftp
-    security: loose
-    port: 21
+on:
+  push:
+    branches:
+      - main
 
-    server-dir: /www/bms/
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-    state-name: .ftp-deploy-sync-state.json
+    steps:
+      - uses: actions/checkout@v4
 
-    exclude: |
-      **/.git*
-      **/.github/**
-      **/.vscode/**
-      .editorconfig
-      .env*
-      application/cache/**
-      application/logs/**
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+
+          protocol: ftp
+          security: loose
+          port: 21
+
+          server-dir: /www/bms/
+
+          state-name: .ftp-deploy-sync-state.json
+
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/.vscode/**
+            .editorconfig
+            .env*
+            application/cache/**
+            application/logs/**
